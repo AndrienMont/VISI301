@@ -2,9 +2,10 @@ import pygame
 from pygame.locals import *
  
 pygame.init()
- 
+vel = 4
 class perso:
-     
+
+    
     def __init__(self): # Chargement du sprite et definition de sa position
          
         self.personnage = pygame.image.load('perso.png').convert_alpha()
@@ -22,16 +23,16 @@ class perso:
              
             if direction == 'droite':               
                 self.direct = self.personnage
-                self.X += 4
+                self.X += vel
             if direction == 'gauche':
                 self.direct = self.personnage
-                self.X -= 4
+                self.X -= vel
             if direction == "haut":
                 self.direct = self.personnage
-                self.Y -= 4
+                self.Y -= vel
             if direction == "bas":
                 self.direct = self.personnage
-                self.Y += 4
+                self.Y += vel
  
  
 screen = pygame.display.set_mode((500,500))   # Ouverture de la fenetre 
@@ -42,7 +43,9 @@ mur = pygame.image.load('mur.png').convert_alpha()
 mur_pos = mur.get_rect()
 mur_pos = pygame.Rect((250,300) ,(216,216))         # Definition de la position du coin en haut à gauche du sprite
                                                     # et de sa taille
-
+#booléen Collision temporaire, vérifie si il y a collisiona avant déplacement
+collisionTemp = False
+posHypo = (0,0)
 
 # Effectuer un deplacement plusieurs fois en laissant appuyé sur la touche
 pygame.key.set_repeat(400, 30)
@@ -56,17 +59,24 @@ while loop:
         if event.type == KEYDOWN:
             if event.key == K_LEFT:
                 joueur.update()                         # mise a jour du Rect avant de tester la collision
-                if joueur.rect.colliderect(mur_pos):    # Si il y a une collision, le sprite va dans le sens inverse et donc s'écarte du mur.
+                posHypo = self.position
+                posHypo
+# tester si mur entre deux cases
+
+
+                
+                """"if joueur.rect.colliderect(mur_pos):    # Si il y a une collision, le sprite va dans le sens inverse et donc s'écarte du mur.
                     print('collision')
-                    joueur.bouge('droite')
+                    
                 else:
-                    joueur.bouge('gauche')              # Sinon il va dans la direction souhaité
+                    joueur.bouge('gauche')              # Sinon il va dans la direction souhaité"""
                     
             if event.key == K_RIGHT:
                 joueur.update()                         
                 if joueur.rect.colliderect(mur_pos):
                     print('collision')
-                    joueur.bouge('gauche')
+                    
+                    
                 else:
                     joueur.bouge('droite')
                     
@@ -74,7 +84,7 @@ while loop:
                 joueur.update()                        
                 if joueur.rect.colliderect(mur_pos):
                     print('collision')
-                    joueur.bouge('bas')
+                    
                 else:
                     joueur.bouge('haut')
                     
@@ -82,7 +92,7 @@ while loop:
                 joueur.update()                        
                 if joueur.rect.colliderect(mur_pos):
                     print('collision')
-                    joueur.bouge("haut")
+                    
                 else:
                     joueur.bouge('bas')
                     
@@ -93,3 +103,4 @@ while loop:
     
     #Rafraichissement
     pygame.display.flip()
+pygame.quit()
