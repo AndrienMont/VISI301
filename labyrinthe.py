@@ -14,23 +14,23 @@ def generateMaze(long, larg):
 
             """
 
-    mazeRes = [[{"wallUp":True, "wallLeft":True} for i in range(0,larg)] for i in range(0,long)]
+    mazeRes = [[{"wallUp":True, "wallLeft":True} for i in range(0,larg)] for i in range(0,long)] # Labyrinthe résultat de dimensions long x larg
 
-    mazeData = [[{"set":False, "done":False} for i in range(0,larg)] for i in range(0,long)]
+    mazeData = [[{"set":False, "done":False} for i in range(0,larg)] for i in range(0,long)] # Tableau d'état des cases (set : case déjà utilisée, done : case dont le traitement est fini)
 
     caseActive = [0, 0]
-    x = 0
-    y = 0
+    x = caseActive[0]
+    y = caseActive[1]
 	
-    casesParcourues = []
-    indexCaseActive = 0
+    casesParcourues = [] # Liste de l'ordre de vérification des cases
+    indexCaseActive = 0 # Indice de la case active dans casesParcourues
 
     while (len(casesParcourues) < long*larg):
         #TRAITER ELEMENT
         casesParcourues.append(caseActive)
         mazeData[x][y]["set"] = True
 
-        if (len(casesParcourues) == long*larg):
+        if (len(casesParcourues) == long*larg): # Si le labyrinthe est complet, on arrête la boucle (-10 pts en INFO303)
             break
 
         #OBTENIR ELEMENT SUIVANT
