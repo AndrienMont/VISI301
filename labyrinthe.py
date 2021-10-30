@@ -1,9 +1,5 @@
 import random
 
-longueur = 16
-largeur = 10
-labyrinthe = []
-
 #case : {"wallUp" = "True", "wallLeft" = "True"}
 
 def generateMaze(long, larg):
@@ -14,7 +10,8 @@ def generateMaze(long, larg):
             larg : int | largeur du labyrinthe
 
         OUT
-            maze : tableau de tableau de cases | labyrinthe généré
+            maze : tableau de (tableau de (dictionnaire de deux booléens "wallUp" "wallLeft")) | labyrinthe généré
+
             """
 
     mazeRes = [[{"wallUp":True, "wallLeft":True} for i in range(0,larg)] for i in range(0,long)]
@@ -29,18 +26,18 @@ def generateMaze(long, larg):
     indexCaseActive = 0
 
     while (len(casesParcourues) < long*larg):
-        #Traiter élément
+        #TRAITER ELEMENT
         casesParcourues.append(caseActive)
         mazeData[x][y]["set"] = True
 
         if (len(casesParcourues) == long*larg):
             break
 
-        #Obtenir élément suivant
-        while checkMovementPossibility(mazeData, x, y) == False: #Si aucun mouvement n'est possible
-            mazeData[x][y]["done"] = True # La case n'est pas à traiter par la suite
+        #OBTENIR ELEMENT SUIVANT
+        while checkMovementPossibility(mazeData, x, y) == False: #Tant que aucun mouvement n'est possible
+            mazeData[x][y]["done"] = True # La case courante n'est pas à traiter par la suite
 
-            while mazeData[x][y]["done"]:
+            while mazeData[x][y]["done"]: # Chercher la prochaine case à traiter
                 indexCaseActive = indexCaseActive - 1
                 
                 caseActive = casesParcourues[indexCaseActive]
@@ -66,7 +63,7 @@ def generateMaze(long, larg):
                 i = i + 1
                 rI = randomIndex[i]
 
-        #Redéfinie la case active
+        #Redéfini la case active
         if rI == 0: #Haut
             mazeRes[x][y]["wallUp"] = False #Enlève le mur entre l'ancienne et nouvelle case
             caseActive = [x, y-1]
@@ -191,5 +188,3 @@ def drawMaze(mazeF3):
         print(ligne)
     ligne = " " + ("̿ "*(len(mazeF3[0])))
     print(ligne)
-            
-            
