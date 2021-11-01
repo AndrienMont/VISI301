@@ -102,7 +102,7 @@ def checkLeftMove(mazeDataF2, xF2, yF2):
 
     IN
         x : int | abscisse de la case à vérifier
-        y : int | largeur du labyrinthe
+        y : int | ordonnée de la case à vérifier
         mazeDataF1 : tableau de tableau de cases | labyrinthe
 
     OUT
@@ -116,7 +116,7 @@ def checkRightMove(mazeDataF2, xF2, yF2):
 
     IN
         x : int | abscisse de la case à vérifier
-        y : int | largeur du labyrinthe
+        y : int | ordonnée de la case à vérifier
         mazeDataF1 : tableau de tableau de cases | labyrinthe
 
     OUT
@@ -129,7 +129,7 @@ def checkUpMove(mazeDataF2, xF2, yF2):
 
     IN
         x : int | abscisse de la case à vérifier
-        y : int | largeur du labyrinthe
+        y : int | ordonnée de la case à vérifier
         mazeDataF1 : tableau de tableau de cases | labyrinthe
 
     OUT
@@ -143,7 +143,7 @@ def checkDownMove(mazeDataF2, xF2, yF2):
 
     IN
         x : int | abscisse de la case à vérifier
-        y : int | largeur du labyrinthe
+        y : int | ordonnée de la case à vérifier
         mazeDataF1 : tableau de tableau de cases | labyrinthe
 
     OUT
@@ -188,3 +188,33 @@ def drawMaze(mazeF3):
         print(ligne)
     ligne = " " + ("̿ "*(len(mazeF3[0])))
     print(ligne)
+
+def yAMur(mazeF4, x, y, direction):
+    """Vérifie si il y a un mur
+
+    IN
+        mazeDataF4 : tableau de tableau de cases | labyrinthe
+        x : int | abscisse de la case à vérifier
+        y : int | ordonnée de la case à vérifier
+        direction : string | Direction du mur à vérifier ("left", "right", "up", "down")
+
+    OUT
+        boolean | Renvoie "vrai" si il y a un mur
+    """
+
+    res = True
+    
+    if direction == "left":
+        res = mazeF4[x][y]["wallLeft"]
+
+    if direction == "up":
+        res = mazeF4[x][y]["wallUp"]
+
+    if direction == "right" and x < len(mazeF4)-1:
+        res = mazeF4[x+1][y]["wallLeft"]
+
+    if direction == "down" and y < len(mazeF4[0])-1:
+        res = mazeF4[x][y+1]["wallUp"]
+
+    return res
+    
