@@ -18,7 +18,7 @@ def generateMaze(long, larg):
 
     mazeData = [[{"set":False, "done":False} for i in range(0,larg)] for i in range(0,long)] # Tableau d'état des cases (set : case déjà utilisée, done : case dont le traitement est fini)
 
-    caseActive = [0, 0]
+    caseActive = randomBorderTile(long, larg) # Définit un point de départ aléatoire  
     x = caseActive[0]
     y = caseActive[1]
 	
@@ -217,4 +217,28 @@ def yAMur(mazeF4, x, y, direction):
         res = mazeF4[x][y+1]["wallUp"]
 
     return res
-    
+
+def randomBorderTile(longF1, largF1):
+    """Donne une case de frontière aléatoire
+
+    IN
+        longF1 : int | longueur du tableau
+        largF1 : int | largeur du tableau
+
+    OUT
+        tableau de 2 int
+    """
+
+    perimeter = 2*(longF1 + largF1) - 4
+    randomTile = random.randint(0,perimeter+1)
+
+    if randomTile < longF1:
+        res = [randomTile, 0]
+    elif randomTile <= longF1+largF1-2:
+        res = [longF1 - 1, randomTile - longF1 + 1]
+    elif randomTile < 2*longF1+largF1:
+        res = [randomTile - longF1 - largF1 + 1, largF1 - 1]
+    else:
+        res = [0, randomTile - 2*longF1 - largF1 + 2]
+
+    return res
