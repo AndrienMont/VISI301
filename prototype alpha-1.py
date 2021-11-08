@@ -9,7 +9,7 @@ import random
 
 
 
-vel = 20
+vel = 1
 
 class perso:
 
@@ -108,7 +108,7 @@ def main():
         screen.fill(couleur)
         dessLab.dessineDedale(origine_x,origine_y,tailleCase,dedale, 10,10,screen)
         screen.blit(fin , ((tailleCase*difficulte-tailleCase),(tailleCase*difficulte-tailleCase)))
-        screen.blit(joueur.personnage , (joueur.X, joueur.Y))
+        screen.blit(joueur.personnage , (joueur.X*tailleCase, joueur.Y*tailleCase))
         pygame.display.update()             
                     
     pygame.quit()
