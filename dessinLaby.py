@@ -19,16 +19,16 @@ def dessineDedale (origine_xF1, origine_yF1, tailleCaseF1, mazeF1, longF1, largF
         for j in range(0,largF1):
             if mazeF1[i][j]["wallLeft"]:
                 
-                Start_left = (i*tailleCaseF1, origine_yF1+(j*tailleCaseF1)) 
-                End_left = (i*tailleCaseF1, origine_yF1+(j*tailleCaseF1)+tailleCaseF1)
+                Start_left = (origine_xF1+i*tailleCaseF1, origine_yF1+(j*tailleCaseF1)) 
+                End_left = (origine_xF1+i*tailleCaseF1, origine_yF1+(j*tailleCaseF1)+tailleCaseF1)
                 pygame.draw.line(screenF1, (166,15,64), Start_left, End_left, 2)
             if mazeF1[i][j]["wallUp"]:
-                Start_up = (origine_xF1+(i*tailleCaseF1),j*tailleCaseF1)
-                End_up = (origine_xF1+(i*tailleCaseF1)+tailleCaseF1,j*tailleCaseF1)
+                Start_up = (origine_xF1+(i*tailleCaseF1),origine_yF1+j*tailleCaseF1)
+                End_up = (origine_xF1+(i*tailleCaseF1)+tailleCaseF1,origine_yF1+j*tailleCaseF1)
                 pygame.draw.line(screenF1, (166,15,64), Start_up, End_up,2)
             
-    End_vertical = (origine_xF1, largF1 * tailleCaseF1)
-    End_horizontal = (longF1 * tailleCaseF1, origine_yF1)
-    End_vertic_horiz = (longF1 * tailleCaseF1, largF1 * tailleCaseF1)
+    End_vertical = (origine_xF1,origine_yF1+ largF1 * tailleCaseF1)
+    End_horizontal = (origine_xF1+longF1 * tailleCaseF1, origine_yF1)
+    End_vertic_horiz = (origine_xF1+longF1 * tailleCaseF1,origine_yF1+ largF1 * tailleCaseF1)
     pygame.draw.line(screenF1,(166,15,64),End_vertical, End_vertic_horiz,2)
     pygame.draw.line(screenF1,(166,15,64), End_horizontal,End_vertic_horiz,2)
