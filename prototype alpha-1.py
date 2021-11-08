@@ -3,9 +3,13 @@ import sys
 import labyrinthe as laby
 import dessinLaby as dessLab
 from pygame.locals import *
+from labyrinthe import *
+from dessinLaby import*
+import random
 
 
-vel = 4
+
+vel = 20
 
 class perso:
 
@@ -14,14 +18,12 @@ class perso:
          
             self.personnage = pygame.image.load('perso.png').convert_alpha()
             self.personnage = pygame.transform.scale(self.personnage , (20, 20))
-            self.rect = self.personnage.get_rect()
             self.X = 0
             self.Y = 0
          
         def update (self):                      # Ajout d'une fonction Update
          
             self.position = (self.X,self.Y)
-            self.rect = pygame.Rect(self.position, (100,100))      # Mise a jour du Rect par rapport à sa nouvelle position
  
          
         def bouge (self, direction):  # Definition d'un fonction pour faire bouger le sprite
@@ -51,13 +53,16 @@ def main():
     screen = pygame.display.set_mode((700,700))
     pygame.display.set_caption("Prototype Alpha-1 du projet MazeRunner")
     joueur = perso()
+    fin = pygame.image.load('fin.png')
+    
 
     origine_x = 0
     origine_y = 0
     tailleCase = 20
+    fin = pygame.transform.scale(fin , (tailleCase,tailleCase))
     couleur = (0,0,0)
-
-    dedale = laby.generateMaze(10,10)
+    difficulte = 10
+    dedale = laby.generateMaze(difficulte,difficulte)
     laby.drawMaze(dedale)
 
     dessLab.dessineDedale(origine_x,origine_y,tailleCase,dedale, 10,10,screen)
@@ -68,31 +73,44 @@ def main():
         for event in pygame.event.get():
                 if event.type == QUIT:
                     loop = False
+                if joueur.X == 180 and joueur.Y == 180:
+                    loop = False
+                    
                 if event.type == KEYDOWN:
                     if event.key == K_LEFT:
-                        joueur.update()
-                        joueur.bouge("gauche")
+                        if yAMur(dedale,joueur.X,joueur.Y,"left"):
+                                print("collision")
+                        else:
+                                joueur.bouge("gauche")
                     
                 if event.type == KEYDOWN:
                     if event.key == K_RIGHT:
-                        joueur.update()
-                        joueur.bouge("droite")
+                        if yAMur(dedale,joueur.X,joueur.Y,"right"):
+                                print("collision")
+                        else:
+                                joueur.bouge("droite")
                     
                 if event.type == KEYDOWN:
                     if event.key == K_UP:
-                        joueur.update()
-                        joueur.bouge("haut")
+                        if yAMur(dedale,joueur.X,joueur.Y,"up"):
+                                print("collision")
+                        else:
+                                joueur.bouge("haut")
                     
                 if event.type == KEYDOWN:
                     if event.key == K_DOWN:
-                        joueur.update()
-                        joueur.bouge("bas")
+                        if yAMur(dedale,joueur.X,joueur.Y,"down"):
+                                print("collision")
+                        else:
+                                joueur.bouge("bas")
+                
                         
         screen.fill(couleur)
         dessLab.dessineDedale(origine_x,origine_y,tailleCase,dedale, 10,10,screen)
+        screen.blit(fin , ((tailleCase*difficulte-tailleCase),(tailleCase*difficulte-tailleCase)))
         screen.blit(joueur.personnage , (joueur.X, joueur.Y))
         pygame.display.update()             
-        
+                    
     pygame.quit()
 
 
