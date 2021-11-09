@@ -15,8 +15,8 @@ def dessineDedale (origine_xF1, origine_yF1, tailleCaseF1, mazeF1, longF1, largF
         OUT
             Lignes sur la fenêtre pygame
         """
-    for i in range(0,longF1):
-        for j in range(0,largF1):
+    for i in range (len(mazeF1[0])):
+        for j in range (len(mazeF1)):
             if mazeF1[i][j]["wallLeft"]:
                 
                 Start_left = (origine_xF1+i*tailleCaseF1, origine_yF1+(j*tailleCaseF1)) 
