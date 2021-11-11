@@ -45,10 +45,3 @@ def pathFinding(maze, start, end):
     res.append(end)
     
     return res
-
-        
-                
-    
-monLaby = laby.generateMaze(10,10)
-laby.drawMaze(monLaby)
-print(pathFinding(monLaby, (0,0), (9,9)))
