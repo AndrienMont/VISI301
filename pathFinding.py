@@ -1,6 +1,48 @@
+#EXPLICATION DE L'ALGORITHME
+
+#   Crée un tableau V de vecteurs de la taille du labyrinthe
+#   Crée une liste T de cases que l'on va traiter
+#   Ajoute la case de fin à la liste T
+
+#   Tant que la case départ n'est pas atteinte
+#       Créer une liste newT
+#       Pour toutes les cases dans la liste T
+#           Attribuer aux cases à gauche, à droite, en haut et en bas un vecteur dans V qui pointe vers la case courante
+#           Illustration :
+#                 (0,1)
+#      (1,0) (case Courante) (-1, 0)
+#                 (0,-1)
+#           Ajouter les cases à gauche, à droite, en haut et en bas à newT
+#       Définir T comme newT, Ceci donne les cases à traiter à la prochaine itération
+
+#   Une fois que l'on a trouvé la case départ
+#   On crée un tableau Res
+
+#   En commençant par la case départ, on lui ajoute le vecteur de V de la case courante et on enregistre la nouvelle case dans Res
+#   Illustration :
+#       case courante : (5,3)
+#       vecteur sur la case courante : V[5][3] = (1,0)
+
+#       case courante := case courante + vecteur sur la case courante = (5,3) + (1,0) = (6,3)
+
+#   Répéter jusqu'à ce que l'on trouve la case de fin
+
+#   Retourner Res
+
 import labyrinthe as laby
 
 def pathFinding(maze, start, end):
+    """Détermine le chemin le plus court entre un départ et une arrivée dans un labyrinthe
+    
+    IN
+        maze : Tableau de tableau de dictionnaire de 2 booléens | labyrinthe environnement
+        start : Tuple de 2 int | case départ
+        end : Tuple de 2 int | case arrivée
+        
+    OUT
+        Tableau de Tuple de 2 int
+    
+    """
 
     mazeVectors = [[(0,0) for i in range(0, len(maze[0]))] for i in range(0, len(maze))]
     activeTiles = [end]
