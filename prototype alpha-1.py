@@ -57,8 +57,7 @@ def main():
 
     origine_x = 0
     origine_y = 0
-    posXmax = 0
-    posYmax = 0
+    posXY = []
     fin = pygame.transform.scale(fin , (tailleCase,tailleCase))
     taille = 10
     caseFin = tailleCase*taille-tailleCase
@@ -79,46 +78,47 @@ def main():
                                 print("collision")
                         else:
                                 joueur.bouge("gauche")
+                                posXY = posXY + [[joueur.X,joueur.Y]]
                     
                     if event.key == K_RIGHT:
                         if laby.yAMur(dedale,joueur.X,joueur.Y,"right"):
                                 print("collision")
                         else:
                                 joueur.bouge("droite")
+                                posXY = posXY + [[joueur.X,joueur.Y]]
                     
                     if event.key == K_UP:
                         if laby.yAMur(dedale,joueur.X,joueur.Y,"up"):
                                 print("collision")
                         else:
                                 joueur.bouge("haut")
+                                posXY = posXY + [[joueur.X,joueur.Y]]
                     
                     if event.key == K_DOWN:
                         if laby.yAMur(dedale,joueur.X,joueur.Y,"down"):
                                 print("collision")
                         else:
                                 joueur.bouge("bas")
-
-                if joueur.X > posXmax:
-                        posXmax = joueur.X
-
-                if joueur.Y > posYmax:
-                        posYmax = joueur.Y
+                                posXY = posXY + [[joueur.X,joueur.Y]]
                         
                 if joueur.X*tailleCase == caseFin and joueur.Y*tailleCase == caseFin:
                         loop = False
                 
 
 #Affichage
-                        
+
+                    
         screen.fill(couleur)
         screen.blit(fin , (caseFin,caseFin))
-        dessLab.affiche_case(origine_x,origine_y,tailleCase,dedale, 10,10,screen,joueur.X,joueur.Y)
+        for i in range(len(posXY)):
+                posX = posXY[i][0]
+                posY = posXY[i][1]
+                dessLab.affiche_case(origine_x,origine_y,tailleCase,dedale, 10,10,screen,posX,posY)
         screen.blit(joueur.personnage , (joueur.X*tailleCase, joueur.Y*tailleCase))
         pygame.display.update()
         
-    pygame.quit()
 
-        
+    pygame.quit()
 
 
 main()
