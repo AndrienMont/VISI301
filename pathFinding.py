@@ -35,7 +35,7 @@ def pathFinding(maze, start, end):
     """Détermine le chemin le plus court entre un départ et une arrivée dans un labyrinthe
     
     IN
-        maze : Tableau de tableau de dictionnaire de 2 booléens | labyrinthe environnement
+        maze : labyrinthe 2D | labyrinthe environnement
         start : Tuple de 2 int | case départ
         end : Tuple de 2 int | case arrivée
         
@@ -85,5 +85,6 @@ def pathFinding(maze, start, end):
         y = currentTile[1]
         currentTile = (x + mazeVectors[x][y][0], y + mazeVectors[x][y][1])
     res.append(end)
+    del res[0]
     
     return res
