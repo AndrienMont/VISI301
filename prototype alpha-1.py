@@ -113,7 +113,7 @@ def main():
         for i in range(len(posXY)):
                 posX = posXY[i][0]
                 posY = posXY[i][1]
-                dessLab.affiche_case(origine_x,origine_y,tailleCase,dedale, 10,10,screen,posX,posY)
+                dessLab.affiche_case(origine_x,origine_y,tailleCase,dedale,screen,posX,posY)
         screen.blit(joueur.personnage , (joueur.X*tailleCase, joueur.Y*tailleCase))
         pygame.display.update()
         

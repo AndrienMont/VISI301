@@ -1,6 +1,6 @@
 import pygame
 
-def dessineDedale (origine_xF1, origine_yF1, tailleCaseF1, mazeF1, longF1, largF1, screenF1,posX,posY):
+def dessineDedale (origine_xF1, origine_yF1, tailleCaseF1, mazeF1, screenF1,posX,posY):
     """Dessine un labyrinthe dans une fenêtre pygame
 
         IN
@@ -8,13 +8,14 @@ def dessineDedale (origine_xF1, origine_yF1, tailleCaseF1, mazeF1, longF1, largF
             origine_yF1 : ordonnée du début du labyrinthe dans la fenêtre | int
             tailleCaseF1 : taille des cases du labyrinthe | int
             mazeF1 : tableau de tableau de dictionnaire de deux booléens | labyrinthe généré
-            longF1 : longueur du labyrinthe généré | int
-            largF1 : largeur du labyrinthe généré | int
             screenF1 : écran où dessiner le labyrinthe | display pygame
 
         OUT
             Lignes sur la fenêtre pygame
         """
+    largF1 = len(mazeF1)
+    longF1 = len(mazeF1[0])
+    
     for i in range(len(mazeF1[0])):
         for j in range(len(mazeF1)):
             if mazeF1[i][j]["wallLeft"]:
@@ -39,10 +40,12 @@ def dessineDedale (origine_xF1, origine_yF1, tailleCaseF1, mazeF1, longF1, largF
 
 
 
-def affiche_case(origine_xF2,origine_yF2,tailleCaseF2,mazeF2,longF2,largF2,screenF2,posX,posY):
+def affiche_case(origine_xF2,origine_yF2,tailleCaseF2,mazeF2,screenF2,posX,posY):
 
     #meme principe que la fonction dessinDedale mais affiche seulement une case
 
+    longF2 = len(mazeF2[0])
+    largF2 = len(mazeF2)
     
     if mazeF2[posX][posY]["wallLeft"]: #Affiche le mur de gauche
         
