@@ -6,7 +6,7 @@ from pygame.locals import *
 from random import*
 
 
-tailleCase = 20
+tailleCase = 30
 vel = 1
 
 class perso:
@@ -60,10 +60,23 @@ def main():
     posXY = []
     fin = pygame.transform.scale(fin , (tailleCase,tailleCase))
     taille = 10
-    caseFin = tailleCase*taille-tailleCase
-    couleur = (0,0,0)
     dedale = laby.generateMaze(taille,taille)
-    laby.drawMaze(dedale) 
+    laby.drawMaze(dedale)
+    
+    DepArr = dessLab.randDepArr(origine_x,origine_y,tailleCase,dedale)
+    
+    caseFinX = DepArr[1][0]*tailleCase
+    caseFinY = DepArr[1][1]*tailleCase
+    caseFin =(caseFinX,caseFinY)
+    couleur = (0,0,0)
+    
+
+    
+    print(DepArr)
+    print(DepArr[0][0])
+    print(DepArr[1])
+    joueur.X = DepArr[0][0]
+    joueur.Y = DepArr[0][1]
 
     
     loop = True
@@ -101,7 +114,7 @@ def main():
                                 joueur.bouge("bas")
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                         
-                if joueur.X*tailleCase == caseFin and joueur.Y*tailleCase == caseFin:
+                if joueur.X*tailleCase == caseFinX and joueur.Y*tailleCase == caseFinY:
                         loop = False
                 
 
@@ -109,7 +122,7 @@ def main():
 
                     
         screen.fill(couleur)
-        screen.blit(fin , (caseFin,caseFin))
+        screen.blit(fin , caseFin)
         for i in range(len(posXY)):
                 posX = posXY[i][0]
                 posY = posXY[i][1]

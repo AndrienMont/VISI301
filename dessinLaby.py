@@ -1,4 +1,6 @@
 import pygame
+import random
+import pathFinding as path 
 
 def dessineDedale (origine_xF1, origine_yF1, tailleCaseF1, mazeF1, screenF1,posX,posY):
     """Dessine un labyrinthe dans une fenêtre pygame
@@ -82,4 +84,54 @@ def affiche_case(origine_xF2,origine_yF2,tailleCaseF2,mazeF2,screenF2,posX,posY)
     End_vertic_horiz = (origine_xF2+longF2 * tailleCaseF2,origine_yF2+ largF2 * tailleCaseF2)
     pygame.draw.line(screenF2,(166,15,64),End_vertical, End_vertic_horiz,2)
     pygame.draw.line(screenF2,(166,15,64), End_horizontal,End_vertic_horiz,2)
+
+
+def randDepArr(posXminF1, posYminF1, tailleCaseF3, mazeF3):
+    """Permet de générer un départ et une arrivée aléatoire dans un labyrinthe et les regénère en cas de nécessité
+
+    IN
+
+    posXminF1, posYminF1: integer | coordonnées des points extrêmes du labyrinthe
+    tailleCaseF3 : integer | taille des cases sur l'affichage du labyrinthe
+    mazeF3 : tableau de tableaux de dictionnaires | labyrinthe
+
+    OUT
+
+    Deux tuples, correspondant à la case de départ et d'arrivée"""
+
+
+    largF3 = len(mazeF3)
+    longF3 = len(mazeF3[0])
+    
+    posXmax = posXminF1 + longF3 -1
+    posYmax = posYminF1 + largF3 -1
+    
+    nbDepArr = 0
+
+    while (nbDepArr < (largF3*longF3*0.4)) :
+        
+        xDep = random.randint(posXminF1,posXmax)
+        yDep = random.randint(posYminF1,posXmax)
+        xArr = random.randint(posXminF1,posXmax)
+        yArr = random.randint(posYminF1,posYmax)
+        DepHyp = (xDep,yDep)
+        ArrHyp = (xArr,yArr)
+
+        DepArr = path.pathFinding(mazeF3,DepHyp,ArrHyp)
+        nbDepArr = len(DepArr)
+
+    return DepHyp,ArrHyp
+    
+
+
+
+
+
+
+
+
+
+
+
+
 
