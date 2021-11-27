@@ -8,6 +8,7 @@ def generateMaze(long, larg, haut):
         IN
             long : int | longueur du labyrinthe
             larg : int | largeur du labyrinthe
+	    haut : int | hauteur du labyrinthe
 
         OUT
             maze : tableau de (tableau de (dictionnaire de deux booléens "wallUp" "wallLeft")) | labyrinthe généré
