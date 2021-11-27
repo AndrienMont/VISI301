@@ -165,7 +165,7 @@ def randomizeList(liste):
         res[i2] = save
 
     for i in range(0,len(liste)-2):
-        swap(i, random.randint(i+1, len(liste)-1))
+        swap(i, random.randint(i, len(liste)-1))
 
     return res
 
