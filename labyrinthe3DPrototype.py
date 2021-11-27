@@ -238,7 +238,7 @@ def drawMaze(mazeF3):
                 if mazeF3[k][i][j]["wallUp"]:
                     ligne=ligne+"̿"
                 else:
-                    ligne=ligne+" "
+                    ligne=ligne+"v"
 
                 if i == len(mazeF3) -1:
                     ligne = ligne + "|"
