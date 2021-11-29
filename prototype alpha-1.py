@@ -1,12 +1,12 @@
 import pygame
 import sys
 import labyrinthe as laby
-import dessinLaby as dessLab
+import dessinLaby2 as dessLab
 from pygame.locals import *
 from random import*
 
 
-tailleCase = 30
+tailleCase = 60
 vel = 1
 
 class perso:
@@ -126,7 +126,9 @@ def main():
         for i in range(len(posXY)):
                 posX = posXY[i][0]
                 posY = posXY[i][1]
-                dessLab.affiche_case(origine_x,origine_y,tailleCase,dedale,screen,posX,posY)
+                #dessLab.affiche_case(origine_x,origine_y,tailleCase,dedale,screen,posX,posY)
+                dessLab.affiche_case_V2(posX, posY, origine_x, origine_y, tailleCase, dedale, screen)
+        #dessLab.dessineDedale_V2(0, 0, tailleCase, dedale, screen)
         screen.blit(joueur.personnage , (joueur.X*tailleCase, joueur.Y*tailleCase))
         pygame.display.update()
         

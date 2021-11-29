@@ -8,9 +8,10 @@ def generateMaze(long, larg, haut):
         IN
             long : int | longueur du labyrinthe
             larg : int | largeur du labyrinthe
+	    haut : int | hauteur du labyrinthe
 
         OUT
-            maze : tableau de (tableau de (dictionnaire de deux booléens "wallUp" "wallLeft")) | labyrinthe généré
+            maze : tableau de (tableau de (tableau de (dictionnaire de trois booléens "wallUp" "wallLeft" "wallLow"))) | labyrinthe généré
 
             """
 
@@ -101,9 +102,10 @@ def checkMovementPossibility(mazeDataF1, zF1, xF1, yF1):
     """Vérifie si un mouvement est possible
 
     IN
-        x : int | abscisse de la case à vérifier
-        y : int | largeur du labyrinthe
-        mazeDataF1 : tableau de tableau de cases | labyrinthe
+    	mazeDataF1 : tableau de tableau de tableau de cases | labyrinthe
+   	zF1 : int | cote de la case à vérifier
+        xF1 : int | abscisse de la case à vérifier
+        yF1 : int | ordonnée de la case à vérifier
     OUT
         boolean
     """
@@ -121,9 +123,10 @@ def checkLeftMove(mazeDataF2, zF2, xF2, yF2):
     """Vérifie si un mouvement à gauche est possible
 
     IN
-        x : int | abscisse de la case à vérifier
-        y : int | ordonnée de la case à vérifier
-        mazeDataF1 : tableau de tableau de cases | labyrinthe
+    	mazeDataF2 : tableau de tableau de tableau de cases | labyrinthe
+    	zF2 : int | cote de la case à vérifier
+        xF2 : int | abscisse de la case à vérifier
+        yF2 : int | ordonnée de la case à vérifier
 
     OUT
         boolean
@@ -135,9 +138,10 @@ def checkRightMove(mazeDataF2, zF2, xF2, yF2):
     """Vérifie si un mouvement à droite est possible
 
     IN
-        x : int | abscisse de la case à vérifier
-        y : int | ordonnée de la case à vérifier
-        mazeDataF1 : tableau de tableau de cases | labyrinthe
+    	mazeDataF2 : tableau de tableau de tableau de cases | labyrinthe
+    	zF2 : int | cote de la case à vérifier
+        xF2 : int | abscisse de la case à vérifier
+        yF2 : int | ordonnée de la case à vérifier
 
     OUT
         boolean
@@ -148,9 +152,10 @@ def checkUpMove(mazeDataF2, zF2, xF2, yF2):
     """Vérifie si un mouvement en haut est possible
 
     IN
-        x : int | abscisse de la case à vérifier
-        y : int | ordonnée de la case à vérifier
-        mazeDataF1 : tableau de tableau de cases | labyrinthe
+    	mazeDataF2 : tableau de tableau de tableau de cases | labyrinthe
+    	zF2 : int | cote de la case à vérifier
+        xF2 : int | abscisse de la case à vérifier
+        yF2 : int | ordonnée de la case à vérifier
 
     OUT
         boolean
@@ -162,9 +167,10 @@ def checkDownMove(mazeDataF2, zF2, xF2, yF2):
     """Vérifie si un mouvement en bas est possible
 
     IN
-        x : int | abscisse de la case à vérifier
-        y : int | ordonnée de la case à vérifier
-        mazeDataF1 : tableau de tableau de cases | labyrinthe
+    	mazeDataF2 : tableau de tableau de tableau de cases | labyrinthe
+    	zF2 : int | cote de la case à vérifier
+        xF2 : int | abscisse de la case à vérifier
+        yF2 : int | ordonnée de la case à vérifier
 
     OUT
         boolean
@@ -176,9 +182,10 @@ def checkLowMove(mazeDataF2, zF2, xF2, yF2):
     """Vérifie si un mouvement en haut est possible
 
     IN
-        x : int | abscisse de la case à vérifier
-        y : int | ordonnée de la case à vérifier
-        mazeDataF1 : tableau de tableau de cases | labyrinthe
+    	mazeDataF2 : tableau de tableau de tableau de cases | labyrinthe
+    	zF2 : int | cote de la case à vérifier
+        xF2 : int | abscisse de la case à vérifier
+        yF2 : int | ordonnée de la case à vérifier
 
     OUT
         boolean
@@ -190,9 +197,10 @@ def checkHighMove(mazeDataF2, zF2, xF2, yF2):
     """Vérifie si un mouvement en bas est possible
 
     IN
-        x : int | abscisse de la case à vérifier
-        y : int | ordonnée de la case à vérifier
-        mazeDataF1 : tableau de tableau de cases | labyrinthe
+        mazeDataF2 : tableau de tableau de tableau de cases | labyrinthe
+    	zF2 : int | cote de la case à vérifier
+        xF2 : int | abscisse de la case à vérifier
+        yF2 : int | ordonnée de la case à vérifier
 
     OUT
         boolean
@@ -227,10 +235,16 @@ def drawMaze(mazeF3):
                 else:
                     ligne=ligne+" "
 
-                if mazeF3[k][i][j]["wallUp"]:
-                    ligne=ligne+"̿"
+                if mazeF3[k][i][j]["wallLow"]:
+                    if mazeF3[k][i][j]["wallUp"]:
+                        ligne=ligne+"‾"
+                    else:
+                        ligne=ligne+" "
                 else:
-                    ligne=ligne+" "
+                    if mazeF3[k][i][j]["wallUp"]:
+                        ligne=ligne+"⊽"
+                    else:
+                        ligne=ligne+"v"
 
                 if i == len(mazeF3) -1:
                     ligne = ligne + "|"
@@ -239,13 +253,14 @@ def drawMaze(mazeF3):
         print(ligne)
     print()
 
-def yAMur(mazeF4, z, x, y, direction):
+def yAMur(mazeF4, x, y, z, direction):
     """Vérifie si il y a un mur
 
     IN
-        mazeDataF4 : tableau de tableau de cases | labyrinthe
-        x : int | abscisse de la case à vérifier
-        y : int | ordonnée de la case à vérifier
+        mazeDataF4 : tableau de tableau de tableau de cases | labyrinthe
+        xF4 : int | abscisse de la case à vérifier
+        yF4 : int | ordonnée de la case à vérifier
+        zF4 : int | cote de la case à vérifier
         direction : string | Direction du mur à vérifier ("left", "right", "up", "down")
 
     OUT
