@@ -9,6 +9,44 @@ from random import*
 tailleCase = 60
 vel = 1
 
+def estDansListe(liste, element):
+        res = False
+        i = 0
+        while (i<len(liste) and not res):
+                res = element == liste[i]
+                i = i + 1
+        return res
+
+def revelerCouloirs(maze_F4, posX_F4, posY_F4):
+
+        res = []
+        tile = (posX_F4, posY_F4)
+        while not laby.yAMur(maze_F4, tile[0], tile[1], "left"):
+                res = res + [tile]
+                tile = (tile[0]-1, tile[1])
+        res = res + [tile]
+
+        tile = (posX_F4, posY_F4)
+        while not laby.yAMur(maze_F4, tile[0], tile[1], "right"):
+                res = res + [tile]
+                tile = (tile[0]+1, tile[1])
+        res = res + [tile]
+
+        tile = (posX_F4, posY_F4)
+        while not laby.yAMur(maze_F4, tile[0], tile[1], "up"):
+                res = res + [tile]
+                tile = (tile[0], tile[1]-1)
+        res = res + [tile]
+
+        tile = (posX_F4, posY_F4)
+        while not laby.yAMur(maze_F4, tile[0], tile[1], "down"):
+                res = res + [tile]
+                tile = (tile[0], tile[1]+1)
+        res = res + [tile]
+
+        return res
+               
+
 class perso:
 
     
@@ -91,28 +129,32 @@ def main():
                                 print("collision")
                         else:
                                 joueur.bouge("gauche")
-                                posXY = posXY + [[joueur.X,joueur.Y]]
+                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y))
+                                #posXY = posXY + [[joueur.X,joueur.Y]]
                     
                     if event.key == K_RIGHT:
                         if laby.yAMur(dedale,joueur.X,joueur.Y,"right"):
                                 print("collision")
                         else:
                                 joueur.bouge("droite")
-                                posXY = posXY + [[joueur.X,joueur.Y]]
+                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y))
+                                #posXY = posXY + [[joueur.X,joueur.Y]]
                     
                     if event.key == K_UP:
                         if laby.yAMur(dedale,joueur.X,joueur.Y,"up"):
                                 print("collision")
                         else:
                                 joueur.bouge("haut")
-                                posXY = posXY + [[joueur.X,joueur.Y]]
+                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y))
+                                #posXY = posXY + [[joueur.X,joueur.Y]]
                     
                     if event.key == K_DOWN:
                         if laby.yAMur(dedale,joueur.X,joueur.Y,"down"):
                                 print("collision")
                         else:
                                 joueur.bouge("bas")
-                                posXY = posXY + [[joueur.X,joueur.Y]]
+                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y))
+                                #posXY = posXY + [[joueur.X,joueur.Y]]
                         
                 if joueur.X*tailleCase == caseFinX and joueur.Y*tailleCase == caseFinY:
                         loop = False
