@@ -225,8 +225,8 @@ def randomizeList(liste):
 
     return res
 
-def drawMaze(mazeF3):
-    for k in range(len(mazeF3)-1, -1, -1):
+def drawMaze(mazeF3, exclude = (-1, 0, 0)):
+    for k in range(len(mazeF3) -1, -1, -1):
         for j in range(0, len(mazeF3[0][0])):
             ligne = ""
             for i in range(0, len(mazeF3[0])):
@@ -235,16 +235,19 @@ def drawMaze(mazeF3):
                 else:
                     ligne=ligne+" "
 
-                if mazeF3[k][i][j]["wallLow"]:
-                    if mazeF3[k][i][j]["wallUp"]:
-                        ligne=ligne+"‾"
-                    else:
-                        ligne=ligne+" "
+                if k == exclude[0] and i == exclude[1] and j == exclude[2]:
+                    ligne=ligne+"ü"
                 else:
-                    if mazeF3[k][i][j]["wallUp"]:
-                        ligne=ligne+"⊽"
+                    if mazeF3[k][i][j]["wallLow"]:
+                        if mazeF3[k][i][j]["wallUp"]:
+                            ligne=ligne+"‾"
+                        else:
+                            ligne=ligne+" "
                     else:
-                        ligne=ligne+"v"
+                        if mazeF3[k][i][j]["wallUp"]:
+                            ligne=ligne+"⊽"
+                        else:
+                            ligne=ligne+"v"
 
                 if i == len(mazeF3) -1:
                     ligne = ligne + "|"
@@ -284,7 +287,7 @@ def yAMur(mazeF4, x, y, z, direction):
     if direction == "down" and y < len(mazeF4[0][0])-1:
         res = mazeF4[z][x][y+1]["wallUp"]
 
-    if direction == "high" and y < len(mazeF4)-1:
+    if direction == "high" and z < len(mazeF4)-1:
         res = mazeF4[z+1][x][y]["wallLow"]
 
     return res
