@@ -1,15 +1,55 @@
 import pygame
 import sys
 import labyrinthe as laby
-import dessinLaby as dessLab
+import dessinLaby2 as dessLab
 from pygame.locals import *
 from random import*
 from labyrinthe3DPrototype import*
 
 
-tailleCase = 30
+tailleCase = 60
 vel = 1
 
+
+
+def estDansListe(liste, element):
+        res = False
+        i = 0
+        while (i<len(liste) and not res):
+                res = element == liste[i]
+                i = i + 1
+        return res
+
+def revelerCouloirs(maze_F4, posX_F4, posY_F4,Z):
+
+        res = []
+        tile = (posX_F4, posY_F4)
+        while not yAMur(maze_F4, tile[0], tile[1], "left",Z):
+                res = res + [tile]
+                tile = (tile[0]-1, tile[1])
+        res = res + [tile]
+
+        tile = (posX_F4, posY_F4)
+        while not yAMur(maze_F4, tile[0], tile[1], "right",Z):
+                res = res + [tile]
+                tile = (tile[0]+1, tile[1])
+        res = res + [tile]
+
+        tile = (posX_F4, posY_F4)
+        while not yAMur(maze_F4, tile[0], tile[1], "up",Z):
+                res = res + [tile]
+                tile = (tile[0], tile[1]-1)
+        res = res + [tile]
+
+        tile = (posX_F4, posY_F4)
+        while not yAMur(maze_F4, tile[0], tile[1], "down",Z):
+                res = res + [tile]
+                tile = (tile[0], tile[1]+1)
+        res = res + [tile]
+
+        return res
+
+               
 class perso:
 
     
@@ -67,11 +107,14 @@ def main():
     
     dessLab.dessineDedale(origine_x,origine_y,tailleCase,dedale[joueur.Z],screen,3,3)
     print(dedale)
+
     
     caseFinX = 2*tailleCase
     caseFinY = 2*tailleCase
     caseFin =(caseFinX,caseFinY)
     couleur = (0,0,0)
+
+
     
     loop = True
     while loop:
@@ -83,30 +126,34 @@ def main():
                     if event.key == K_LEFT:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"left"):
                                 joueur.bouge("gauche")
+                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                     
                     if event.key == K_RIGHT:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"right"):
                                 joueur.bouge("droite")
+                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                     
                     if event.key == K_UP:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"up"):
                                 joueur.bouge("haut")
+                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                     
                     if event.key == K_DOWN:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"down"):
                                 joueur.bouge("bas")
+                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                                 
-                    if event.key == K_f:
+                    if event.key == K_l:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"low"):
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                                 joueur.Z = joueur.Z -1 
                                 
                                 
-                    if event.key == K_e:
+                    if event.key == K_h:
                         if  not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"high"):
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                                 joueur.Z = joueur.Z +1 
@@ -120,7 +167,10 @@ def main():
                     
         screen.fill(couleur)
         screen.blit(fin , caseFin)
-        dessLab.dessineDedale(origine_x,origine_y,tailleCase,dedale[joueur.Z],screen,3,3)
+        for i in range(len(posXY)):
+                posX = posXY[i][0]
+                posY = posXY[i][1]
+                dessLab.affiche_case_V2(posX, posY, origine_x, origine_y, tailleCase, dedale[joueur.Z], screen)
         screen.blit(joueur.personnage , (joueur.X*tailleCase, joueur.Y*tailleCase))
         pygame.display.update()
         
