@@ -29,10 +29,10 @@
 
 #   Retourner Res
 
-import labyrinthe3DPrototype as laby
+import labyrinthe3DPrototype as lab
 import time
 
-def pathFinding(maze, start, end):
+def pathFinding3D(maze, start, end):
     """Détermine le chemin le plus court entre un départ et une arrivée dans un labyrinthe
     
     IN
@@ -60,32 +60,32 @@ def pathFinding(maze, start, end):
             z = tile[0]
             x = tile[1]
             y = tile[2]
-            if not laby.yAMur(maze, x, y, z, "left"):
+            if not lab.yAMur(maze, x, y, z, "left"):
                 if not (mazeVectors[z][x-1][y] != (0,0,0) or mazeVectors[z][x-1][y] == end):
                     mazeVectors[z][x-1][y] = (0,1,0)
                     newActiveTiles.append((z, x-1, y))
                     
-            if not laby.yAMur(maze, x, y, z, "right"):
+            if not lab.yAMur(maze, x, y, z, "right"):
                 if not (mazeVectors[z][x+1][y] != (0,0,0) or mazeVectors[z][x+1][y] == end):
                     mazeVectors[z][x+1][y] = (0,-1,0)
                     newActiveTiles.append((z, x+1, y))
                     
-            if not laby.yAMur(maze, x, y, z, "up"):
+            if not lab.yAMur(maze, x, y, z, "up"):
                 if not (mazeVectors[z][x][y-1] != (0,0,0) or mazeVectors[z][x][y-1] == end):
                     mazeVectors[z][x][y-1] = (0,0,1)
                     newActiveTiles.append((z, x, y-1))
                     
-            if not laby.yAMur(maze, x, y, z, "down"):
+            if not lab.yAMur(maze, x, y, z, "down"):
                 if not (mazeVectors[z][x][y+1] != (0,0,0) or mazeVectors[z][x][y+1] == end):
                     mazeVectors[z][x][y+1] = (0,0,-1)
                     newActiveTiles.append((z, x, y+1))
                     
-            if not laby.yAMur(maze, x, y, z, "low"):
+            if not lab.yAMur(maze, x, y, z, "low"):
                 if not (mazeVectors[z-1][x][y] != (0,0,0) or mazeVectors[z-1][x][y] == end):
                     mazeVectors[z-1][x][y] = (1,0,0)
                     newActiveTiles.append((z-1, x, y))
                     
-            if not laby.yAMur(maze, x, y, z, "high"):
+            if not lab.yAMur(maze, x, y, z, "high"):
                 if not (mazeVectors[z+1][x][y] != (0,0,0) or mazeVectors[z+1][x][y] == end):
                     mazeVectors[z+1][x][y] = (-1,0,0)
                     newActiveTiles.append((z+1, x, y))
@@ -107,9 +107,11 @@ def pathFinding(maze, start, end):
 
 def showPF(maze, path):
     for i in range(len(path)):
-        laby.drawMaze(maze, path[i])
+        lab.drawMaze(maze, path[i])
         time.sleep(1);
 
-T = laby.generateMaze(3,3,3)
-laby.drawMaze(T)
-showPF(T, pathFinding(T, (0,0,0), (2,2,2)))
+#T = lab.generateMaze(3,3,3)
+#lab.drawMaze(T)
+#showPF(T, pathFinding3D(T, (0,0,0), (2,2,2)))
+#print(pathFinding3D(T, (0,0,0), (2,2,2)))
+

@@ -2,6 +2,9 @@ import pygame
 import random
 import pathFinding as path
 import labyrinthe as laby
+from pathFinding3D import*
+from labyrinthe3DPrototype import*
+
 
 def affiche_case_V2(x_F2, y_F2, origine_xF2, origine_yF2, tailleCase_F2, maze_F2, screen_F2):
     posX = origine_xF2 + tailleCase_F2*x_F2
@@ -153,9 +156,70 @@ def randDepArr(posXminF1, posYminF1, tailleCaseF3, mazeF3):
 
 
 
+def randDepArr3D(posXminF1, posYminF1,nbEtages, tailleCaseF3, mazeF3):
+    """Permet de générer un départ et une arrivée aléatoire dans un labyrinthe et les regénère en cas de nécessité
+
+    IN
+
+    posXminF1, posYminF1: integer | coordonnées des points extrêmes du labyrinthe
+    tailleCaseF3 : integer | taille des cases sur l'affichage du labyrinthe
+    mazeF3 : tableau de tableaux de dictionnaires | labyrinthe
+
+    OUT
+
+    Deux tuples, correspondant à la case de départ et d'arrivée"""
+
+
+    largF3 = len(mazeF3)
+    longF3 = len(mazeF3[0])
+    
+    posXmax = posXminF1 + longF3 -1
+    posYmax = posYminF1 + largF3 -1
+    posZminF1 = 0
+    posZmax = nbEtages
+    
+    nbDepArr = 0
+
+    while (nbDepArr < (largF3*longF3*nbEtages*0.4)) :
+        
+        xDep = random.randint(posXminF1,posXmax)
+        yDep = random.randint(posYminF1,posXmax)
+        zDep = random.randint(posZminF1,posZmax)
+        xArr = random.randint(posXminF1,posXmax)
+        yArr = random.randint(posYminF1,posYmax)
+        zArr = random.randint(posZminF1,posZmax)
+        DepHyp = (xDep,yDep,zDep)
+        ArrHyp = (xArr,yArr,zArr)
+
+        DepArr = pathFinding3D(mazeF3,DepHyp,ArrHyp)
+        nbDepArr = len(DepArr)
+
+    return DepHyp,ArrHyp
 
 
 
+
+def affiche_case_V2_3D(x_F2, y_F2,z_F2, origine_xF2, origine_yF2, tailleCase_F2, maze_F2, screen_F2):
+    posX = origine_xF2 + tailleCase_F2*x_F2
+    posY = origine_yF2 + tailleCase_F2*y_F2
+
+    tileTextureIndex = 0
+    if yAMur(maze_F2, x_F2, y_F2, z_F2,  "up"):
+        tileTextureIndex = tileTextureIndex + 1
+
+    if yAMur(maze_F2, x_F2, y_F2,z_F2, "left"):
+        tileTextureIndex = tileTextureIndex + 2
+
+    if yAMur(maze_F2, x_F2, y_F2, z_F2,  "down"):
+        tileTextureIndex = tileTextureIndex + 4
+
+    if yAMur(maze_F2, x_F2, y_F2, z_F2, "right"):
+        tileTextureIndex = tileTextureIndex + 8
+
+    fileName = "mazetexture/"+str(tileTextureIndex) + ".png"
+    tile = pygame.image.load(fileName)
+    tile = pygame.transform.scale(tile, (tailleCase_F2, tailleCase_F2))
+    screen_F2.blit(tile, (posX, posY))
 
 
 

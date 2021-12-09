@@ -5,6 +5,7 @@ import dessinLaby2 as dessLab
 from pygame.locals import *
 from random import*
 from labyrinthe3DPrototype import*
+from pathFinding3D import*
 
 
 tailleCase = 60
@@ -59,7 +60,7 @@ class perso:
             self.personnage = pygame.transform.scale(self.personnage , (tailleCase, tailleCase))
             self.X = 0
             self.Y = 0
-            self.Z = 2
+            self.Z = 0
          
 
         def update (self):                      
@@ -81,7 +82,12 @@ class perso:
                 if direction == "bas":
                     self.direct = self.personnage
                     self.Y += vel
-                
+
+                if direction == "low":
+                    self.Z -= 1
+
+                if direction == "high":
+                    self.Z += 1
 
 
 
@@ -99,21 +105,36 @@ def main():
 
     origine_x = 0
     origine_y = 0
+    nbEtages = 2
     posXY = []
     fin = pygame.transform.scale(fin , (tailleCase,tailleCase))
     taille = 3
     dedale = generateMaze(taille,taille,taille)
     drawMaze(dedale)
+
+    DepArr = dessLab.randDepArr3D(origine_x,origine_y,nbEtages,tailleCase,dedale)
+
     
     dessLab.dessineDedale(origine_x,origine_y,tailleCase,dedale[joueur.Z],screen,3,3)
     print(dedale)
 
     
-    caseFinX = 2*tailleCase
-    caseFinY = 2*tailleCase
+    caseFinX = DepArr[1][0]*tailleCase
+    caseFinY = DepArr[1][1]*tailleCase
+    caseFinZ= DepArr[1][2]*tailleCase
     caseFin =(caseFinX,caseFinY)
     couleur = (0,0,0)
 
+    print(DepArr)
+    print(DepArr[0][0])
+    print(DepArr[1])
+    joueur.X = DepArr[0][0]
+    joueur.Y = DepArr[0][1]
+    joueur.Z = DepArr[0][2]
+    print(joueur.X)
+    print(joueur.Y)
+    print(joueur.Z)
+    
 
     
     loop = True
@@ -150,15 +171,15 @@ def main():
                     if event.key == K_l:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"low"):
                                 posXY = posXY + [[joueur.X,joueur.Y]]
-                                joueur.Z = joueur.Z -1 
+                                joueur.Z = joueur.Z -1
                                 
                                 
                     if event.key == K_h:
                         if  not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"high"):
                                 posXY = posXY + [[joueur.X,joueur.Y]]
-                                joueur.Z = joueur.Z +1 
+                                joueur.Z = joueur.Z +1
                         
-                if joueur.X*tailleCase == caseFinX and joueur.Y*tailleCase == caseFinY:
+                if joueur.X*tailleCase == caseFinX and joueur.Y*tailleCase == caseFinY and joueur.Z*tailleCase == caseFinZ :
                         loop = False
                 
 
@@ -166,11 +187,12 @@ def main():
 
                     
         screen.fill(couleur)
-        screen.blit(fin , caseFin)
+        if joueur.Z*tailleCase == caseFinZ :
+                screen.blit(fin , caseFin)
         for i in range(len(posXY)):
                 posX = posXY[i][0]
                 posY = posXY[i][1]
-                dessLab.affiche_case_V2(posX, posY, origine_x, origine_y, tailleCase, dedale[joueur.Z], screen)
+                dessLab.affiche_case_V2_3D(posX, posY,joueur.Z, origine_x, origine_y, tailleCase, dedale, screen)
         screen.blit(joueur.personnage , (joueur.X*tailleCase, joueur.Y*tailleCase))
         pygame.display.update()
         
