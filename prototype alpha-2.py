@@ -98,6 +98,7 @@ class perso:
 
 def main():
 
+
     pygame.init()
     pygame.key.set_repeat(400, 100)
     
@@ -138,6 +139,13 @@ def main():
     print(joueur.X)
     print(joueur.Y)
     print(joueur.Z)
+
+    font = pygame.font.Font(None, 24)
+    text = font.render("Voici les commandes", 1, (255,255,255))
+    cmd1 = font.render("Utilisez les flêches directionnelles pour se déplacer",1,(255,255,255))
+    cmd2 = font.render("Utilisez H pour monter d'un étage lorsque vous êtes sur une échelle montante", 1, (255,255,255))
+    cmd3 = font.render("Utilisez L pour descendre d'un étage lorsque vous êtes sur une échelle descendante", 1, (255,255,255))
+
     
 
     
@@ -151,37 +159,37 @@ def main():
                     if event.key == K_LEFT:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"left"):
                                 joueur.bouge("gauche")
-                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
+                                posXY.extend(revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                     
                     if event.key == K_RIGHT:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"right"):
                                 joueur.bouge("droite")
-                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
+                                posXY.extend(revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                     
                     if event.key == K_UP:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"up"):
                                 joueur.bouge("haut")
-                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
+                                posXY.extend(revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                     
                     if event.key == K_DOWN:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"down"):
                                 joueur.bouge("bas")
-                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
+                                posXY.extend(revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                                 
                     if event.key == K_l:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"low"):
                                 posXY = posXY + [[joueur.X,joueur.Y]]
-                                joueur.Z = joueur.Z -1
+                                joueur.bouge("low")
                                 
                                 
                     if event.key == K_h:
                         if  not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"high"):
                                 posXY = posXY + [[joueur.X,joueur.Y]]
-                                joueur.Z = joueur.Z +1
+                                joueur.bouge("high")
                         
                 if joueur.X*tailleCase == caseFinX and joueur.Y*tailleCase == caseFinY and joueur.Z*tailleCase == caseFinZ :
                         loop = False
@@ -191,13 +199,17 @@ def main():
 
                     
         screen.fill(couleur)
-        if joueur.Z*tailleCase == caseFinZ :
-                screen.blit(fin , caseFin)
         for i in range(len(posXY)):
                 posX = posXY[i][0]
                 posY = posXY[i][1]
                 dessLab.affiche_case_V2_3D(posX, posY,joueur.Z, origine_x, origine_y, tailleCase, dedale, screen)
         screen.blit(joueur.personnage , (joueur.X*tailleCase, joueur.Y*tailleCase))
+        if joueur.Z*tailleCase == caseFinZ :
+                screen.blit(fin , caseFin)
+        screen.blit(text, (0,400))
+        screen.blit(cmd1, (20,430))
+        screen.blit(cmd2, (20,460))
+        screen.blit(cmd3, (20,490))
         pygame.display.update()
         
 
