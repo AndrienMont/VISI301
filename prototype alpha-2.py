@@ -21,32 +21,36 @@ def estDansListe(liste, element):
                 i = i + 1
         return res
 
-def revelerCouloirs(maze_F4, posX_F4, posY_F4,Z):
+def revelerCouloirs(maze_F4, posX_F4, posY_F4):
 
         res = []
         tile = (posX_F4, posY_F4)
-        while not yAMur(maze_F4, tile[0], tile[1], "left",Z):
+        while not laby.yAMur(maze_F4, tile[0], tile[1], "left"):
                 res = res + [tile]
                 tile = (tile[0]-1, tile[1])
-        res = res + [tile]
+        if not estDansListe(res, [tile]):
+                res = res + [tile]
 
         tile = (posX_F4, posY_F4)
-        while not yAMur(maze_F4, tile[0], tile[1], "right",Z):
+        while not laby.yAMur(maze_F4, tile[0], tile[1], "right"):
                 res = res + [tile]
                 tile = (tile[0]+1, tile[1])
-        res = res + [tile]
+        if not estDansListe(res, [tile]):
+                res = res + [tile]
 
         tile = (posX_F4, posY_F4)
-        while not yAMur(maze_F4, tile[0], tile[1], "up",Z):
+        while not laby.yAMur(maze_F4, tile[0], tile[1], "up"):
                 res = res + [tile]
                 tile = (tile[0], tile[1]-1)
-        res = res + [tile]
+        if not estDansListe(res, [tile]):
+                res = res + [tile]
 
         tile = (posX_F4, posY_F4)
-        while not yAMur(maze_F4, tile[0], tile[1], "down",Z):
+        while not laby.yAMur(maze_F4, tile[0], tile[1], "down"):
                 res = res + [tile]
                 tile = (tile[0], tile[1]+1)
-        res = res + [tile]
+        if not estDansListe(res, [tile]):
+                res = res + [tile]
 
         return res
 
@@ -93,6 +97,7 @@ class perso:
 
 
 def main():
+
 
     pygame.init()
     pygame.key.set_repeat(400, 100)
@@ -154,6 +159,13 @@ def main():
     print(joueur.X)
     print(joueur.Y)
     print(joueur.Z)
+
+    font = pygame.font.Font(None, 24)
+    text = font.render("Voici les commandes", 1, (255,255,255))
+    cmd1 = font.render("Utilisez les flêches directionnelles pour se déplacer",1,(255,255,255))
+    cmd2 = font.render("Utilisez H pour monter d'un étage lorsque vous êtes sur une échelle montante", 1, (255,255,255))
+    cmd3 = font.render("Utilisez L pour descendre d'un étage lorsque vous êtes sur une échelle descendante", 1, (255,255,255))
+
     
 
     
@@ -167,7 +179,7 @@ def main():
                     if event.key == K_LEFT:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"left"):
                                 joueur.bouge("gauche")
-                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
+                                posXY.extend(revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
@@ -177,7 +189,7 @@ def main():
                     if event.key == K_RIGHT:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"right"):
                                 joueur.bouge("droite")
-                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
+                                posXY.extend(revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
@@ -187,7 +199,7 @@ def main():
                     if event.key == K_UP:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"up"):
                                 joueur.bouge("haut")
-                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
+                                posXY.extend(revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
@@ -197,7 +209,7 @@ def main():
                     if event.key == K_DOWN:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"down"):
                                 joueur.bouge("bas")
-                                posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
+                                posXY.extend(revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
@@ -207,7 +219,7 @@ def main():
                     if event.key == K_l:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"low"):
                                 posXY = posXY + [[joueur.X,joueur.Y]]
-                                joueur.Z = joueur.Z -1
+                                joueur.bouge("low")
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
                                                 del Eclat[i]
@@ -217,7 +229,7 @@ def main():
                     if event.key == K_h:
                         if  not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"high"):
                                 posXY = posXY + [[joueur.X,joueur.Y]]
-                                joueur.Z = joueur.Z +1
+                                joueur.bouge("high")
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
                                                 del Eclat[i]
@@ -231,11 +243,13 @@ def main():
 
                     
         screen.fill(couleur)
+
         if Eclat:
                 for i in range(0,len(Eclat)) :
                         if joueur.Z == Eclat[i][2] :
                                 screen.blit(shard, (Eclat[i][0]*tailleCase,Eclat[i][1]*tailleCase))
         
+
         for i in range(len(posXY)):
                 posX = posXY[i][0]
                 posY = posXY[i][1]
@@ -244,11 +258,19 @@ def main():
         if joueur.Z*tailleCase == caseFinZ :
                 screen.blit(fin , caseFin)
         screen.blit(joueur.personnage , (joueur.X*tailleCase, joueur.Y*tailleCase))
+
         screen.blit(myfont.render(str(shard_amount),1,(255,0,0)),(250,500))
         screen.blit(myfont.render(" éclat(s)",1,(255,0,0)),(260,500))
         screen.blit(myfont.render("Vous êtes actuellement à l'étage n°",1,(255,0,0)),(50,530))
         screen.blit(myfont.render(str(joueur.Z),1,(255,0,0)),(365,530))
         screen.blit(myfont.render(" du labyrinthe",1,(255,0,0)),(375,530))
+
+        if joueur.Z*tailleCase == caseFinZ :
+                screen.blit(fin , caseFin)
+        screen.blit(text, (0,400))
+        screen.blit(cmd1, (20,430))
+        screen.blit(cmd2, (20,460))
+        screen.blit(cmd3, (20,490))
         pygame.display.update()
         
 

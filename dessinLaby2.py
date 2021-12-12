@@ -22,6 +22,20 @@ def affiche_case_V2(x_F2, y_F2, origine_xF2, origine_yF2, tailleCase_F2, maze_F2
 
     if laby.yAMur(maze_F2, x_F2, y_F2, "right"):
         tileTextureIndex = tileTextureIndex + 8
+    
+    if not laby.yAMur(maze_F2, x_F2, y_F2, "low") or not laby.yAMur(maze_F2, x_F2, y_F2, "high"):
+        
+
+        if laby.yAMur(maze_F2, x_F2, y_F2, "high"):
+            fileName = "ladders/ladderDown.png"
+
+        if laby.yAMur(maze_F2, x_F2, y_F2, "high"):
+            fileName = "ladders/ladderUp.png"
+            
+    if laby.yAMur(maze_F2, x_F2, y_F2, "low") and laby.yAMur(maze_F2, x_F2, y_F2, "high"):
+        fileName = "ladders/ladderBoth.png"
+        
+        
 
     fileName = "mazetexture/"+str(tileTextureIndex) + ".png"
     tile = pygame.image.load(fileName)
@@ -204,6 +218,8 @@ def affiche_case_V2_3D(x_F2, y_F2,z_F2, origine_xF2, origine_yF2, tailleCase_F2,
     posY = origine_yF2 + tailleCase_F2*y_F2
 
     tileTextureIndex = 0
+    fileName2 = ""
+    
     if yAMur(maze_F2, x_F2, y_F2, z_F2,  "up"):
         tileTextureIndex = tileTextureIndex + 1
 
@@ -216,11 +232,26 @@ def affiche_case_V2_3D(x_F2, y_F2,z_F2, origine_xF2, origine_yF2, tailleCase_F2,
     if yAMur(maze_F2, x_F2, y_F2, z_F2, "right"):
         tileTextureIndex = tileTextureIndex + 8
 
+
     fileName = "mazetexture/"+str(tileTextureIndex) + ".png"
     tile = pygame.image.load(fileName)
     tile = pygame.transform.scale(tile, (tailleCase_F2, tailleCase_F2))
     screen_F2.blit(tile, (posX, posY))
 
+
+    if not yAMur(maze_F2, x_F2, y_F2,z_F2, "low") or not yAMur(maze_F2, x_F2, y_F2,z_F2,"high"):
+
+        if yAMur(maze_F2, x_F2, y_F2,z_F2,"high"):
+            tile2 = pygame.image.load("ladders/ladderDown.png")
+            tile2 = pygame.transform.scale(tile2, (tailleCase_F2, tailleCase_F2))
+            screen_F2.blit(tile2, (posX, posY))
+
+        if yAMur(maze_F2, x_F2, y_F2,z_F2,"low"):
+            tile2 = pygame.image.load("ladders/ladderUp.png")
+            tile2 = pygame.transform.scale(tile2, (tailleCase_F2, tailleCase_F2))
+            screen_F2.blit(tile2, (posX, posY))
+
+        
 
 
 
