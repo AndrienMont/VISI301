@@ -101,17 +101,37 @@ def main():
     pygame.display.set_caption("Prototype Alpha-2 du projet MazeRunner")
     joueur = perso()
     fin = pygame.image.load('fin.png')
-    
+
+    shard = pygame.image.load("shard.png")
+    shard = pygame.transform.scale(shard,(tailleCase,tailleCase))
 
     origine_x = 0
     origine_y = 0
     nbEtages = 2
     posXY = []
+    shard_amount = 0
     fin = pygame.transform.scale(fin , (tailleCase,tailleCase))
-    taille = 3
+    taille = 5
     dedale = generateMaze(taille,taille,taille)
     drawMaze(dedale)
 
+    #Position des éclats
+    xS1 = randint(0,taille-1)
+    yS1 = randint(0,taille-1)
+    zS1 = randint(0,nbEtages)
+    xS2 = randint(0,taille-1)
+    yS2 = randint(0,taille-1)
+    zS2 = randint(0,nbEtages)
+    xS3 = randint(0,taille-1)
+    yS3 = randint(0,taille-1)
+    zS3 = randint(0,nbEtages)
+
+    Eclat = [(xS1,yS1,zS1),(xS2,yS2,zS2),(xS3,yS3,zS3)]
+
+    myfont = pygame.font.SysFont("monospace",15)
+    
+
+    
     DepArr = dessLab.randDepArr3D(origine_x,origine_y,nbEtages,tailleCase,dedale)
 
     
@@ -149,37 +169,61 @@ def main():
                                 joueur.bouge("gauche")
                                 posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
+                                for i in range(0,len(Eclat)):
+                                        if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
+                                                del Eclat[i]
+                                                shard_amount += 1
                     
                     if event.key == K_RIGHT:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"right"):
                                 joueur.bouge("droite")
                                 posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
+                                for i in range(0,len(Eclat)):
+                                        if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
+                                                del Eclat[i]
+                                                shard_amount += 1
                     
                     if event.key == K_UP:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"up"):
                                 joueur.bouge("haut")
                                 posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
+                                for i in range(0,len(Eclat)):
+                                        if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
+                                                del Eclat[i]
+                                                shard_amount += 1
                     
                     if event.key == K_DOWN:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"down"):
                                 joueur.bouge("bas")
                                 posXY.extend(revelerCouloirs(dedale, joueur.X, joueur.Y,joueur.Z))
                                 posXY = posXY + [[joueur.X,joueur.Y]]
+                                for i in range(0,len(Eclat)):
+                                        if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
+                                                del Eclat[i]
+                                                shard_amount += 1
                                 
                     if event.key == K_l:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"low"):
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                                 joueur.Z = joueur.Z -1
+                                for i in range(0,len(Eclat)):
+                                        if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
+                                                del Eclat[i]
+                                                shard_amount += 1
                                 
                                 
                     if event.key == K_h:
                         if  not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"high"):
                                 posXY = posXY + [[joueur.X,joueur.Y]]
                                 joueur.Z = joueur.Z +1
+                                for i in range(0,len(Eclat)):
+                                        if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
+                                                del Eclat[i]
+                                                shard_amount += 1
                         
-                if joueur.X*tailleCase == caseFinX and joueur.Y*tailleCase == caseFinY and joueur.Z*tailleCase == caseFinZ :
+                if (joueur.X*tailleCase == caseFinX and joueur.Y*tailleCase == caseFinY and joueur.Z*tailleCase == caseFinZ) and shard_amount >= 3 :
                         loop = False
                 
 
@@ -187,13 +231,24 @@ def main():
 
                     
         screen.fill(couleur)
-        if joueur.Z*tailleCase == caseFinZ :
-                screen.blit(fin , caseFin)
+        if Eclat:
+                for i in range(0,len(Eclat)) :
+                        if joueur.Z == Eclat[i][2] :
+                                screen.blit(shard, (Eclat[i][0]*tailleCase,Eclat[i][1]*tailleCase))
+        
         for i in range(len(posXY)):
                 posX = posXY[i][0]
                 posY = posXY[i][1]
                 dessLab.affiche_case_V2_3D(posX, posY,joueur.Z, origine_x, origine_y, tailleCase, dedale, screen)
+
+        if joueur.Z*tailleCase == caseFinZ :
+                screen.blit(fin , caseFin)
         screen.blit(joueur.personnage , (joueur.X*tailleCase, joueur.Y*tailleCase))
+        screen.blit(myfont.render(str(shard_amount),1,(255,0,0)),(250,500))
+        screen.blit(myfont.render(" éclat(s)",1,(255,0,0)),(260,500))
+        screen.blit(myfont.render("Vous êtes actuellement à l'étage n°",1,(255,0,0)),(50,530))
+        screen.blit(myfont.render(str(joueur.Z),1,(255,0,0)),(365,530))
+        screen.blit(myfont.render(" du labyrinthe",1,(255,0,0)),(375,530))
         pygame.display.update()
         
 
