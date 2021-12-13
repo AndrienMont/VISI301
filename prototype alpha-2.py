@@ -26,25 +26,33 @@ def revelerCouloirs(maze_F4, posX_F4, posY_F4, posZ_F4, baseTiles):
                 if not estDansListe(baseTiles, tile):
                         baseTiles.extend([tile])
                 tile = (tile[0]-1, tile[1], posZ_F4)
+        if not estDansListe(baseTiles, tile):
+                        baseTiles.extend([tile])
 
         tile = (posX_F4, posY_F4, posZ_F4)
         while not laby2D.yAMur(maze_F4, tile[0], tile[1], "right"):
                 if not estDansListe(baseTiles, tile):
                         baseTiles.extend([tile])
                 tile = (tile[0]+1, tile[1], posZ_F4)
+        if not estDansListe(baseTiles, tile):
+                        baseTiles.extend([tile])
 
         tile = (posX_F4, posY_F4, posZ_F4)
         while not laby2D.yAMur(maze_F4, tile[0], tile[1], "up"):
                 if not estDansListe(baseTiles, tile):
                         baseTiles.extend([tile])
                 tile = (tile[0], tile[1]-1, posZ_F4)
+        if not estDansListe(baseTiles, tile):
+                        baseTiles.extend([tile])
 
         tile = (posX_F4, posY_F4, posZ_F4)
         while not laby2D.yAMur(maze_F4, tile[0], tile[1], "down"):
                 if not estDansListe(baseTiles, tile):
                         baseTiles.extend([tile])
                 tile = (tile[0], tile[1]+1, posZ_F4)
-        #print(len(baseTiles))
+        if not estDansListe(baseTiles, tile):
+                        baseTiles.extend([tile])
+        print(len(baseTiles))
 
 
                
@@ -165,7 +173,7 @@ def main():
     cmd1 = font.render("Utilisez les flêches directionnelles pour se déplacer",1,(255,255,255))
     cmd2 = font.render("Utilisez H pour monter d'un étage lorsque vous êtes sur une échelle montante", 1, (255,255,255))
     cmd3 = font.render("Utilisez L pour descendre d'un étage lorsque vous êtes sur une échelle descendante", 1, (255,255,255))
-
+    revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
     
 
     
@@ -214,8 +222,8 @@ def main():
                                 
                     if event.key == K_l:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"low"):
-                                posXY = posXY + [[joueur.X,joueur.Y]]
                                 joueur.bouge("low")
+                                revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
                                                 del Eclat[i]
@@ -224,8 +232,8 @@ def main():
                                 
                     if event.key == K_h:
                         if  not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"high"):
-                                posXY = posXY + [[joueur.X,joueur.Y]]
                                 joueur.bouge("high")
+                                revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
                                                 del Eclat[i]
@@ -247,9 +255,9 @@ def main():
         
 
         for i in range(len(posXY)):
-                posX = posXY[i][0]
-                posY = posXY[i][1]
-                dessLab.affiche_case_V2_3D(posX, posY, joueur.Z, origine_x, origine_y, tailleCase, dedale, screen)
+                 posX = posXY[i][0]
+                 posY = posXY[i][1]
+                 dessLab.affiche_case_V2_3D(posX, posY, joueur.Z, origine_x, origine_y, tailleCase, dedale, screen)
 
         if joueur.Z*tailleCase == caseFinZ :
                 screen.blit(fin , caseFin)
