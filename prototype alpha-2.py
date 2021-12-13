@@ -1,6 +1,6 @@
 import pygame
 import sys
-import labyrinthe as laby
+import labyrinthe as laby2D
 import dessinLaby2 as dessLab
 from pygame.locals import *
 from random import*
@@ -14,38 +14,38 @@ def estDansListe(liste, element):
         res = False
         i = 0
         while (i<len(liste) and not res):
-                res = element == liste[i]
+                if (element[0] == liste[i][0] and element[1] == liste[i][1]):
+                        res = True
                 i = i + 1
         return res
 
-def revelerCouloirs(maze_F4, posX_F4, posY_F4):
+def revelerCouloirs(maze_F4, posX_F4, posY_F4, posZ_F4, baseTiles):
 
-        res = []
-        tile = (posX_F4, posY_F4)
-        while not laby.yAMur(maze_F4, tile[0], tile[1], "left"):
-                if not estDansListe(res, [tile]):
-                        res = res + [tile]
-                tile = (tile[0]-1, tile[1])
+        tile = (posX_F4, posY_F4, posZ_F4)
+        while not laby2D.yAMur(maze_F4, tile[0], tile[1], "left"):
+                if not estDansListe(baseTiles, tile):
+                        baseTiles.extend([tile])
+                tile = (tile[0]-1, tile[1], posZ_F4)
 
-        tile = (posX_F4, posY_F4)
-        while not laby.yAMur(maze_F4, tile[0], tile[1], "right"):
-                if not estDansListe(res, [tile]):
-                        res = res + [tile]
-                tile = (tile[0]+1, tile[1])
+        tile = (posX_F4, posY_F4, posZ_F4)
+        while not laby2D.yAMur(maze_F4, tile[0], tile[1], "right"):
+                if not estDansListe(baseTiles, tile):
+                        baseTiles.extend([tile])
+                tile = (tile[0]+1, tile[1], posZ_F4)
 
-        tile = (posX_F4, posY_F4)
-        while not laby.yAMur(maze_F4, tile[0], tile[1], "up"):
-                if not estDansListe(res, [tile]):
-                        res = res + [tile]
-                tile = (tile[0], tile[1]-1)
+        tile = (posX_F4, posY_F4, posZ_F4)
+        while not laby2D.yAMur(maze_F4, tile[0], tile[1], "up"):
+                if not estDansListe(baseTiles, tile):
+                        baseTiles.extend([tile])
+                tile = (tile[0], tile[1]-1, posZ_F4)
 
-        tile = (posX_F4, posY_F4)
-        while not laby.yAMur(maze_F4, tile[0], tile[1], "down"):
-                tile = (tile[0], tile[1]+1)
-                if not estDansListe(res, [tile]):
-                        res = res + [tile]
+        tile = (posX_F4, posY_F4, posZ_F4)
+        while not laby2D.yAMur(maze_F4, tile[0], tile[1], "down"):
+                if not estDansListe(baseTiles, tile):
+                        baseTiles.extend([tile])
+                tile = (tile[0], tile[1]+1, posZ_F4)
+        #print(len(baseTiles))
 
-        return res
 
                
 class perso:
@@ -89,8 +89,6 @@ class perso:
 
                 if direction == "high":
                     self.Z += 1
-
-
 
 
 def main():
@@ -176,8 +174,7 @@ def main():
                     if event.key == K_LEFT:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"left"):
                                 joueur.bouge("gauche")
-                                posXY.extend(revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y))
-                                posXY = posXY + [[joueur.X,joueur.Y]]
+                                revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
                                                 del Eclat[i]
@@ -186,8 +183,7 @@ def main():
                     if event.key == K_RIGHT:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"right"):
                                 joueur.bouge("droite")
-                                posXY.extend(revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y))
-                                posXY = posXY + [[joueur.X,joueur.Y]]
+                                revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
                                                 del Eclat[i]
@@ -196,8 +192,7 @@ def main():
                     if event.key == K_UP:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"up"):
                                 joueur.bouge("haut")
-                                posXY.extend(revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y))
-                                posXY = posXY + [[joueur.X,joueur.Y]]
+                                revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
                                                 del Eclat[i]
@@ -206,8 +201,7 @@ def main():
                     if event.key == K_DOWN:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"down"):
                                 joueur.bouge("bas")
-                                posXY.extend(revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y))
-                                posXY = posXY + [[joueur.X,joueur.Y]]
+                                revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
                                                 del Eclat[i]
@@ -256,12 +250,12 @@ def main():
                 screen.blit(fin , caseFin)
 
         if joueur.spriteX != joueur.X:
-                joueur.spriteX = joueur.spriteX + (joueur.X - joueur.spriteX)/3
+                joueur.spriteX = joueur.spriteX + (joueur.X - joueur.spriteX)/5
                 if abs(joueur.X - joueur.spriteX) < 0.05:
                         joueur.spriteX = joueur.X
 
         if joueur.spriteY != joueur.Y:
-                joueur.spriteY = joueur.spriteY + (joueur.Y - joueur.spriteY)/3
+                joueur.spriteY = joueur.spriteY + (joueur.Y - joueur.spriteY)/5
                 if abs(joueur.Y - joueur.spriteY) < 0.05:
                         joueur.spriteY = joueur.Y
 

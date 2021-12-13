@@ -213,7 +213,7 @@ def randDepArr3D(posXminF1, posYminF1,nbEtages, tailleCaseF3, mazeF3):
 
 
 
-def affiche_case_V2_3D(x_F2, y_F2,z_F2, origine_xF2, origine_yF2, tailleCase_F2, maze_F2, screen_F2):
+def affiche_case_V2_3D(x_F2, y_F2, z_F2, origine_xF2, origine_yF2, tailleCase_F2, maze_F2, screen_F2):
     posX = origine_xF2 + tailleCase_F2*x_F2
     posY = origine_yF2 + tailleCase_F2*y_F2
 
