@@ -54,8 +54,10 @@ class perso:
         def __init__(self): # Chargement du sprite et definition de sa position
                 
                 
-                self.personnage = pygame.image.load('perso.png').convert_alpha()
-                self.personnage = pygame.transform.scale(self.personnage , (tailleCase, tailleCase))
+                self.sprite_idle_1 = pygame.image.load('bob/idle_1.png').convert_alpha()
+                self.sprite_idle_1 = pygame.transform.scale(self.sprite_idle_1 , (tailleCase, tailleCase))
+                self.sprite_idle_2 = pygame.image.load('bob/idle_2.png').convert_alpha()
+                self.sprite_idle_2 = pygame.transform.scale(self.sprite_idle_2 , (tailleCase, tailleCase))
                 self.X = 0
                 self.Y = 0
                 self.Z = 0
@@ -72,16 +74,16 @@ class perso:
         def bouge (self, direction):  # Definition d'un fonction pour faire bouger le sprite
              
                 if direction == 'droite':               
-                    self.direct = self.personnage
+                    #self.direct = self.personnage
                     self.X += 1
                 if direction == 'gauche':
-                    self.direct = self.personnage
+                    #self.direct = self.personnage
                     self.X -= 1
                 if direction == "haut":
-                    self.direct = self.personnage
+                    #self.direct = self.personnage
                     self.Y -= 1
                 if direction == "bas":
-                    self.direct = self.personnage
+                    #self.direct = self.personnage
                     self.Y += 1
 
                 if direction == "low":
@@ -114,6 +116,9 @@ def main():
     taille = 5
     dedale = generateMaze(taille,taille,taille)
     drawMaze(dedale)
+
+    #MODIF
+    spriteCycle = 0
 
     #Position des éclats
     xS1 = randint(0,taille-1)
@@ -245,10 +250,6 @@ def main():
                 posX = posXY[i][0]
                 posY = posXY[i][1]
                 dessLab.affiche_case_V2_3D(posX, posY, joueur.Z, origine_x, origine_y, tailleCase, dedale, screen)
-        if Eclat:
-                for i in range(0,len(Eclat)) :
-                        if joueur.Z == Eclat[i][2] :
-                                screen.blit(shard, (Eclat[i][0]*tailleCase,Eclat[i][1]*tailleCase))
 
         if joueur.Z*tailleCase == caseFinZ :
                 screen.blit(fin , caseFin)
@@ -263,8 +264,13 @@ def main():
                 if abs(joueur.Y - joueur.spriteY) < 0.05:
                         joueur.spriteY = joueur.Y
 
-                        
-        screen.blit(joueur.personnage , (joueur.spriteX*tailleCase, joueur.spriteY*tailleCase))
+        if spriteCycle < 250:
+                screen.blit(joueur.sprite_idle_1 , (joueur.spriteX*tailleCase, joueur.spriteY*tailleCase))
+        elif spriteCycle < 500:
+                screen.blit(joueur.sprite_idle_2 , (joueur.spriteX*tailleCase, joueur.spriteY*tailleCase))
+        else:
+                spriteCycle = 0
+        spriteCycle = spriteCycle + 1
 
         screen.blit(myfont.render(str(shard_amount),1,(255,0,0)),(250,500))
         screen.blit(myfont.render(" éclat(s)",1,(255,0,0)),(260,500))
