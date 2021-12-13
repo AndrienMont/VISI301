@@ -1,4 +1,6 @@
 import pygame
+from pygame.locals import *
+import os
 import sys
 import labyrinthe as laby2D
 import dessinLaby2 as dessLab
@@ -102,13 +104,94 @@ class perso:
 
 
 def main():
-
-
+            # Game Initialization
     pygame.init()
+     
+    # Center the Game Application
+    os.environ['SDL_VIDEO_CENTERED'] = '1'
+     
+    # Game Resolution
+    screen_width=700
+    screen_height=700
+    screen=pygame.display.set_mode((screen_width, screen_height))
+     
+    # Text Renderer
+    def text_format(message, textFont, textSize, textColor):
+        newFont=pygame.font.Font(textFont, textSize)
+        newText=newFont.render(message, 0, textColor)
+     
+        return newText
+     
+     
+    # Colors
+    white=(255, 255, 255)
+    black=(0, 0, 0)
+    gray=(50, 50, 50)
+    red=(255, 0, 0)
+    green=(0, 255, 0)
+    blue=(0, 0, 255)
+    yellow=(255, 255, 0)
+     
+    # Game Fonts
+    font = "Retro.ttf"
+     
+     
+    # Game Framerate
+    clock = pygame.time.Clock()
+    FPS=30
+
+    
+    jeu = False
+    menu=True
+    selected="jouer"
+
+    while menu:
+            for event in pygame.event.get():
+                    if event.type==pygame.QUIT:
+                            pygame.quit()
+                            quit()
+                    if event.type==pygame.KEYDOWN:
+                            if event.key==pygame.K_UP:
+                                    selected="jouer"
+                            elif event.key==pygame.K_DOWN:
+                                    selected="quitter"
+                            if event.key==pygame.K_RETURN:
+                                if selected=="jouer":
+                                        jeu = True
+                                        menu = False
+                                if selected=="quitter":
+                                        pygame.quit()
+                                        quit()
+     
+            # Main Menu UI
+            screen.fill(blue)
+            title=text_format("MazeRunner", font, 90 , yellow)
+            if selected=="jouer":
+                text_start=text_format("JOUER", font, 75, white)
+            else:
+                text_start = text_format("JOUER", font, 75, black)
+            if selected=="quitter":
+                text_quit=text_format("QUITTER", font, 75, white)
+            else:
+                text_quit = text_format("QUITTER", font, 75, black)
+     
+            title_rect=title.get_rect()
+            start_rect=text_start.get_rect()
+            quit_rect=text_quit.get_rect()
+     
+            # Main Menu Text
+            screen.blit(title, (screen_width/2 - (title_rect[2]/2), 80))
+            screen.blit(text_start, (screen_width/2 - (start_rect[2]/2), 300))
+            screen.blit(text_quit, (screen_width/2 - (quit_rect[2]/2), 360))
+            pygame.display.update()
+            clock.tick(FPS)
+            pygame.display.set_caption("Prototype Alpha-2 du projet MazeRunner")
+     
+        
+
+
     pygame.key.set_repeat(400, 100)
     
-    screen = pygame.display.set_mode((700,700))
-    pygame.display.set_caption("Prototype Alpha-2 du projet MazeRunner")
     joueur = perso()
     fin = pygame.image.load('fin.png')
 
@@ -177,11 +260,10 @@ def main():
     
 
     
-    loop = True
-    while loop:
+    while jeu:
         for event in pygame.event.get():
                 if event.type == QUIT:
-                    loop = False
+                    jeu = False
 
                 if event.type == KEYDOWN:
                     if event.key == K_LEFT:
@@ -240,7 +322,7 @@ def main():
                                                 shard_amount += 1
                         
                 if (joueur.X*tailleCase == caseFinX and joueur.Y*tailleCase == caseFinY and joueur.Z*tailleCase == caseFinZ) and shard_amount >= 3 :
-                        loop = False
+                        jeu = False
                 
 
 #Affichage
