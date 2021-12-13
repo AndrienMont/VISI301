@@ -54,7 +54,7 @@ class perso:
         def __init__(self): # Chargement du sprite et definition de sa position
                 
                 
-                self.personnage = pygame.image.load('square.png').convert_alpha()
+                self.personnage = pygame.image.load('perso.png').convert_alpha()
                 self.personnage = pygame.transform.scale(self.personnage , (tailleCase, tailleCase))
                 self.X = 0
                 self.Y = 0
@@ -245,6 +245,10 @@ def main():
                 posX = posXY[i][0]
                 posY = posXY[i][1]
                 dessLab.affiche_case_V2_3D(posX, posY, joueur.Z, origine_x, origine_y, tailleCase, dedale, screen)
+        if Eclat:
+                for i in range(0,len(Eclat)) :
+                        if joueur.Z == Eclat[i][2] :
+                                screen.blit(shard, (Eclat[i][0]*tailleCase,Eclat[i][1]*tailleCase))
 
         if joueur.Z*tailleCase == caseFinZ :
                 screen.blit(fin , caseFin)
