@@ -1,12 +1,12 @@
 import pygame
 import random
 import pathFinding as path
-import labyrinthe as laby
+#import labyrinthe as laby
 from pathFinding3D import*
-from labyrinthe3DPrototype import*
+import labyrinthe3DPrototype as laby
 
 
-def affiche_case_V2(x_F2, y_F2, origine_xF2, origine_yF2, tailleCase_F2, maze_F2, screen_F2):
+def affiche_case_V2(x_F2, y_F2, z_F2, origine_xF2, origine_yF2, tailleCase_F2, maze_F2, screen_F2):
     posX = origine_xF2 + tailleCase_F2*x_F2
     posY = origine_yF2 + tailleCase_F2*y_F2
 
@@ -220,16 +220,16 @@ def affiche_case_V2_3D(x_F2, y_F2,z_F2, origine_xF2, origine_yF2, tailleCase_F2,
     tileTextureIndex = 0
     fileName2 = ""
     
-    if yAMur(maze_F2, x_F2, y_F2, z_F2,  "up"):
+    if laby.yAMur(maze_F2, x_F2, y_F2, z_F2,  "up"):
         tileTextureIndex = tileTextureIndex + 1
 
-    if yAMur(maze_F2, x_F2, y_F2,z_F2, "left"):
+    if laby.yAMur(maze_F2, x_F2, y_F2,z_F2, "left"):
         tileTextureIndex = tileTextureIndex + 2
 
-    if yAMur(maze_F2, x_F2, y_F2, z_F2,  "down"):
+    if laby.yAMur(maze_F2, x_F2, y_F2, z_F2,  "down"):
         tileTextureIndex = tileTextureIndex + 4
 
-    if yAMur(maze_F2, x_F2, y_F2, z_F2, "right"):
+    if laby.yAMur(maze_F2, x_F2, y_F2, z_F2, "right"):
         tileTextureIndex = tileTextureIndex + 8
 
 
@@ -239,14 +239,18 @@ def affiche_case_V2_3D(x_F2, y_F2,z_F2, origine_xF2, origine_yF2, tailleCase_F2,
     screen_F2.blit(tile, (posX, posY))
 
 
-    if not yAMur(maze_F2, x_F2, y_F2,z_F2, "low") or not yAMur(maze_F2, x_F2, y_F2,z_F2,"high"):
-
-        if yAMur(maze_F2, x_F2, y_F2,z_F2,"high"):
+    if not laby.yAMur(maze_F2, x_F2, y_F2,z_F2, "low") or not laby.yAMur(maze_F2, x_F2, y_F2,z_F2,"high"):
+        if not laby.yAMur(maze_F2, x_F2, y_F2,z_F2, "low") and not laby.yAMur(maze_F2, x_F2, y_F2,z_F2,"high"):
+            tile2 = pygame.image.load("ladders/ladderBoth.png")
+            tile2 = pygame.transform.scale(tile2, (tailleCase_F2, tailleCase_F2))
+            screen_F2.blit(tile2, (posX, posY))
+            
+        elif laby.yAMur(maze_F2, x_F2, y_F2,z_F2,"high"):
             tile2 = pygame.image.load("ladders/ladderDown.png")
             tile2 = pygame.transform.scale(tile2, (tailleCase_F2, tailleCase_F2))
             screen_F2.blit(tile2, (posX, posY))
 
-        if yAMur(maze_F2, x_F2, y_F2,z_F2,"low"):
+        else: # laby.yAMur(maze_F2, x_F2, y_F2,z_F2,"low"):
             tile2 = pygame.image.load("ladders/ladderUp.png")
             tile2 = pygame.transform.scale(tile2, (tailleCase_F2, tailleCase_F2))
             screen_F2.blit(tile2, (posX, posY))

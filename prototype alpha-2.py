@@ -9,9 +9,6 @@ from pathFinding3D import*
 
 
 tailleCase = 60
-vel = 1
-
-
 
 def estDansListe(liste, element):
         res = False
@@ -59,33 +56,37 @@ class perso:
 
     
         def __init__(self): # Chargement du sprite et definition de sa position
-         
-            self.personnage = pygame.image.load('perso.png').convert_alpha()
-            self.personnage = pygame.transform.scale(self.personnage , (tailleCase, tailleCase))
-            self.X = 0
-            self.Y = 0
-            self.Z = 0
+                
+                
+                self.personnage = pygame.image.load('perso.png').convert_alpha()
+                self.personnage = pygame.transform.scale(self.personnage , (tailleCase, tailleCase))
+                self.X = 0
+                self.Y = 0
+                self.Z = 0
+
+                self.spriteX = 0
+                self.spriteY = 0
          
 
-        def update (self):                      
-         
-            self.position = (self.X,self.Y)
+        def update (self):
+
+                self.position = (self.X,self.Y)
  
          
         def bouge (self, direction):  # Definition d'un fonction pour faire bouger le sprite
              
                 if direction == 'droite':               
                     self.direct = self.personnage
-                    self.X += vel
+                    self.X += 1
                 if direction == 'gauche':
                     self.direct = self.personnage
-                    self.X -= vel
+                    self.X -= 1
                 if direction == "haut":
                     self.direct = self.personnage
-                    self.Y -= vel
+                    self.Y -= 1
                 if direction == "bas":
                     self.direct = self.personnage
-                    self.Y += vel
+                    self.Y += 1
 
                 if direction == "low":
                     self.Z -= 1
@@ -141,7 +142,7 @@ def main():
 
     
     dessLab.dessineDedale(origine_x,origine_y,tailleCase,dedale[joueur.Z],screen,3,3)
-    print(dedale)
+    #print(dedale)
 
     
     caseFinX = DepArr[1][0]*tailleCase
@@ -253,11 +254,23 @@ def main():
         for i in range(len(posXY)):
                 posX = posXY[i][0]
                 posY = posXY[i][1]
-                dessLab.affiche_case_V2_3D(posX, posY,joueur.Z, origine_x, origine_y, tailleCase, dedale, screen)
+                dessLab.affiche_case_V2_3D(posX, posY, joueur.Z, origine_x, origine_y, tailleCase, dedale, screen)
 
         if joueur.Z*tailleCase == caseFinZ :
                 screen.blit(fin , caseFin)
-        screen.blit(joueur.personnage , (joueur.X*tailleCase, joueur.Y*tailleCase))
+
+        if joueur.spriteX != joueur.X:
+                joueur.spriteX = joueur.spriteX + (joueur.X - joueur.spriteX)/3
+                if abs(joueur.X - joueur.spriteX) < 0.05:
+                        joueur.spriteX = joueur.X
+
+        if joueur.spriteY != joueur.Y:
+                joueur.spriteY = joueur.spriteY + (joueur.Y - joueur.spriteY)/3
+                if abs(joueur.Y - joueur.spriteY) < 0.05:
+                        joueur.spriteY = joueur.Y
+
+                        
+        screen.blit(joueur.personnage , (joueur.spriteX*tailleCase, joueur.spriteY*tailleCase))
 
         screen.blit(myfont.render(str(shard_amount),1,(255,0,0)),(250,500))
         screen.blit(myfont.render(" éclat(s)",1,(255,0,0)),(260,500))
