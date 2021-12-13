@@ -23,31 +23,27 @@ def revelerCouloirs(maze_F4, posX_F4, posY_F4):
         res = []
         tile = (posX_F4, posY_F4)
         while not laby.yAMur(maze_F4, tile[0], tile[1], "left"):
-                res = res + [tile]
+                if not estDansListe(res, [tile]):
+                        res = res + [tile]
                 tile = (tile[0]-1, tile[1])
-        if not estDansListe(res, [tile]):
-                res = res + [tile]
 
         tile = (posX_F4, posY_F4)
         while not laby.yAMur(maze_F4, tile[0], tile[1], "right"):
-                res = res + [tile]
+                if not estDansListe(res, [tile]):
+                        res = res + [tile]
                 tile = (tile[0]+1, tile[1])
-        if not estDansListe(res, [tile]):
-                res = res + [tile]
 
         tile = (posX_F4, posY_F4)
         while not laby.yAMur(maze_F4, tile[0], tile[1], "up"):
-                res = res + [tile]
+                if not estDansListe(res, [tile]):
+                        res = res + [tile]
                 tile = (tile[0], tile[1]-1)
-        if not estDansListe(res, [tile]):
-                res = res + [tile]
 
         tile = (posX_F4, posY_F4)
         while not laby.yAMur(maze_F4, tile[0], tile[1], "down"):
-                res = res + [tile]
                 tile = (tile[0], tile[1]+1)
-        if not estDansListe(res, [tile]):
-                res = res + [tile]
+                if not estDansListe(res, [tile]):
+                        res = res + [tile]
 
         return res
 
@@ -58,7 +54,7 @@ class perso:
         def __init__(self): # Chargement du sprite et definition de sa position
                 
                 
-                self.personnage = pygame.image.load('perso.png').convert_alpha()
+                self.personnage = pygame.image.load('square.png').convert_alpha()
                 self.personnage = pygame.transform.scale(self.personnage , (tailleCase, tailleCase))
                 self.X = 0
                 self.Y = 0
