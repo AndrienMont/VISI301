@@ -104,18 +104,22 @@ class perso:
 
 
 def main():
-            # Game Initialization
     pygame.init()
      
-    # Center the Game Application
     os.environ['SDL_VIDEO_CENTERED'] = '1'
      
-    # Game Resolution
     screen_width=700
     screen_height=700
     screen=pygame.display.set_mode((screen_width, screen_height))
+    
+    clock = pygame.time.Clock()
+    counter = 0
+    timer_event = pygame.USEREVENT+1 #Définition de l'id de l'event
+    pygame.time.set_timer(timer_event, 1000) #initialisation du timer
+
+    score = 3000
+    NbDeplacements = 0 
      
-    # Text Renderer
     def text_format(message, textFont, textSize, textColor):
         newFont=pygame.font.Font(textFont, textSize)
         newText=newFont.render(message, 0, textColor)
@@ -123,7 +127,6 @@ def main():
         return newText
      
      
-    # Colors
     white=(255, 255, 255)
     black=(0, 0, 0)
     gray=(50, 50, 50)
@@ -132,13 +135,7 @@ def main():
     blue=(0, 0, 255)
     yellow=(255, 255, 0)
      
-    # Game Fonts
     font = "Retro.ttf"
-     
-     
-    # Game Framerate
-    clock = pygame.time.Clock()
-    FPS=30
 
     
     jeu = False
@@ -163,7 +160,6 @@ def main():
                                         pygame.quit()
                                         quit()
      
-            # Main Menu UI
             screen.fill(blue)
             title=text_format("MazeRunner", font, 90 , yellow)
             if selected=="jouer":
@@ -179,12 +175,10 @@ def main():
             start_rect=text_start.get_rect()
             quit_rect=text_quit.get_rect()
      
-            # Main Menu Text
             screen.blit(title, (screen_width/2 - (title_rect[2]/2), 80))
             screen.blit(text_start, (screen_width/2 - (start_rect[2]/2), 300))
             screen.blit(text_quit, (screen_width/2 - (quit_rect[2]/2), 360))
             pygame.display.update()
-            clock.tick(FPS)
             pygame.display.set_caption("Prototype Alpha-2 du projet MazeRunner")
      
         
@@ -261,15 +255,20 @@ def main():
 
     
     while jeu:
+        clock.tick(60)
         for event in pygame.event.get():
                 if event.type == QUIT:
                     jeu = False
+
+                if event.type == timer_event: #Si l'event se déroule, alors ....
+                        counter += 1
 
                 if event.type == KEYDOWN:
                     if event.key == K_LEFT:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"left"):
                                 joueur.bouge("gauche")
                                 revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
+                                NbDeplacements = NbDeplacements + 1 
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
                                                 del Eclat[i]
@@ -279,6 +278,7 @@ def main():
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"right"):
                                 joueur.bouge("droite")
                                 revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
+                                NbDeplacements = NbDeplacements + 1 
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
                                                 del Eclat[i]
@@ -288,6 +288,7 @@ def main():
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"up"):
                                 joueur.bouge("haut")
                                 revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
+                                NbDeplacements = NbDeplacements + 1 
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
                                                 del Eclat[i]
@@ -297,6 +298,7 @@ def main():
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"down"):
                                 joueur.bouge("bas")
                                 revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
+                                NbDeplacements = NbDeplacements + 1 
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
                                                 del Eclat[i]
@@ -306,6 +308,7 @@ def main():
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"low"):
                                 joueur.bouge("low")
                                 revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
+                                NbDeplacements = NbDeplacements + 1 
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
                                                 del Eclat[i]
@@ -316,6 +319,7 @@ def main():
                         if  not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"high"):
                                 joueur.bouge("high")
                                 revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
+                                NbDeplacements = NbDeplacements + 1 
                                 for i in range(0,len(Eclat)):
                                         if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
                                                 del Eclat[i]
@@ -362,11 +366,11 @@ def main():
                 spriteCycle = 0
         spriteCycle = spriteCycle + 1
 
-        screen.blit(myfont.render(str(shard_amount),1,(255,0,0)),(250,500))
-        screen.blit(myfont.render(" éclat(s)",1,(255,0,0)),(260,500))
-        screen.blit(myfont.render("Vous êtes actuellement à l'étage n°",1,(255,0,0)),(50,530))
-        screen.blit(myfont.render(str(joueur.Z),1,(255,0,0)),(365,530))
-        screen.blit(myfont.render(" du labyrinthe",1,(255,0,0)),(375,530))
+        screen.blit(myfont.render(str(shard_amount),1,(255,0,0)),(250,520))
+        screen.blit(myfont.render(" éclat(s)",1,(255,0,0)),(260,520))
+        screen.blit(myfont.render("Vous êtes actuellement à l'étage n°",1,(255,0,0)),(50,540))
+        screen.blit(myfont.render(str(joueur.Z),1,(255,0,0)),(365,540))
+        screen.blit(myfont.render(" du labyrinthe",1,(255,0,0)),(375,540))
 
         if joueur.Z*tailleCase == caseFinZ :
                 screen.blit(fin , caseFin)
@@ -375,8 +379,10 @@ def main():
         screen.blit(cmd2, (20,460))
         screen.blit(cmd3, (20,490))
         pygame.display.update()
-        
 
+    score = score - NbDeplacements -  counter
+    print("votre score est de :")
+    print(score)
     pygame.quit()
 
 
