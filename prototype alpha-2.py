@@ -54,7 +54,7 @@ def revelerCouloirs(maze_F4, posX_F4, posY_F4, posZ_F4, baseTiles):
                 tile = (tile[0], tile[1]+1, posZ_F4)
         if not estDansListe(baseTiles, tile):
                         baseTiles.extend([tile])
-        print(len(baseTiles))
+        #print(len(baseTiles))
 
 
                
@@ -251,6 +251,17 @@ def main():
     cmd2 = font.render("Utilisez H pour monter d'un étage lorsque vous êtes sur une échelle montante", 1, (255,255,255))
     cmd3 = font.render("Utilisez L pour descendre d'un étage lorsque vous êtes sur une échelle descendante", 1, (255,255,255))
     revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
+
+    def recolterEclats(listeEclats):
+        i_ = 0
+        quantiteEclatsRecoltes = 0
+        while (i_<len(listeEclats)): #Eclat
+                if joueur.X == listeEclats[i_][0] and joueur.Y == listeEclats[i_][1] and joueur.Z == listeEclats[i_][2] :
+                        del listeEclats[i_]
+                        quantiteEclatsRecoltes = quantiteEclatsRecoltes + 1 #shard_amount += 1
+                        i_ = i_ - 1
+                i_ = i_ + 1
+        return quantiteEclatsRecoltes
     
 
     
@@ -269,50 +280,35 @@ def main():
                                 joueur.bouge("gauche")
                                 revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
                                 NbDeplacements = NbDeplacements + 1 
-                                for i in range(0,len(Eclat)):
-                                        if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
-                                                del Eclat[i]
-                                                shard_amount += 1
+                                shard_amount = shard_amount + recolterEclats(Eclat)
                     
                     if event.key == K_RIGHT:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"right"):
                                 joueur.bouge("droite")
                                 revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
                                 NbDeplacements = NbDeplacements + 1 
-                                for i in range(0,len(Eclat)):
-                                        if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
-                                                del Eclat[i]
-                                                shard_amount += 1
+                                shard_amount = shard_amount + recolterEclats(Eclat)
                     
                     if event.key == K_UP:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"up"):
                                 joueur.bouge("haut")
                                 revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
                                 NbDeplacements = NbDeplacements + 1 
-                                for i in range(0,len(Eclat)):
-                                        if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
-                                                del Eclat[i]
-                                                shard_amount += 1
+                                shard_amount = shard_amount + recolterEclats(Eclat)
                     
                     if event.key == K_DOWN:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"down"):
                                 joueur.bouge("bas")
                                 revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
                                 NbDeplacements = NbDeplacements + 1 
-                                for i in range(0,len(Eclat)):
-                                        if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
-                                                del Eclat[i]
-                                                shard_amount += 1
+                                shard_amount = shard_amount + recolterEclats(Eclat)
                                 
                     if event.key == K_l:
                         if not yAMur(dedale,joueur.X,joueur.Y,joueur.Z,"low"):
                                 joueur.bouge("low")
                                 revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
                                 NbDeplacements = NbDeplacements + 1 
-                                for i in range(0,len(Eclat)):
-                                        if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
-                                                del Eclat[i]
-                                                shard_amount += 1
+                                shard_amount = shard_amount + recolterEclats(Eclat)
                                 
                                 
                     if event.key == K_h:
@@ -320,10 +316,7 @@ def main():
                                 joueur.bouge("high")
                                 revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
                                 NbDeplacements = NbDeplacements + 1 
-                                for i in range(0,len(Eclat)):
-                                        if joueur.X == Eclat[i][0] and joueur.Y == Eclat[i][1] and joueur.Z == Eclat[i][2] :
-                                                del Eclat[i]
-                                                shard_amount += 1
+                                shard_amount = shard_amount + recolterEclats(Eclat)
                         
                 if (joueur.X*tailleCase == caseFinX and joueur.Y*tailleCase == caseFinY and joueur.Z*tailleCase == caseFinZ) and shard_amount >= 3 :
                         jeu = False
@@ -334,16 +327,16 @@ def main():
                     
         screen.fill(couleur)
 
-        if Eclat:
-                for i in range(0,len(Eclat)) :
-                        if joueur.Z == Eclat[i][2] :
-                                screen.blit(shard, (Eclat[i][0]*tailleCase,Eclat[i][1]*tailleCase))
-        
-
         for i in range(len(posXY)):
                  posX = posXY[i][0]
                  posY = posXY[i][1]
                  dessLab.affiche_case_V2_3D(posX, posY, joueur.Z, origine_x, origine_y, tailleCase, dedale, screen)
+        
+
+        if Eclat:
+                for i in range(0,len(Eclat)) :
+                        if joueur.Z == Eclat[i][2] :
+                                screen.blit(shard, (Eclat[i][0]*tailleCase,Eclat[i][1]*tailleCase))
 
         if joueur.Z*tailleCase == caseFinZ :
                 screen.blit(fin , caseFin)
@@ -358,9 +351,10 @@ def main():
                 if abs(joueur.Y - joueur.spriteY) < 0.05:
                         joueur.spriteY = joueur.Y
 
-        if spriteCycle < 250:
+        spriteCyclePeriod = 30
+        if spriteCycle < spriteCyclePeriod/2:
                 screen.blit(joueur.sprite_idle_1 , (joueur.spriteX*tailleCase, joueur.spriteY*tailleCase))
-        elif spriteCycle < 500:
+        elif spriteCycle < spriteCyclePeriod:
                 screen.blit(joueur.sprite_idle_2 , (joueur.spriteX*tailleCase, joueur.spriteY*tailleCase))
         else:
                 spriteCycle = 0
@@ -372,8 +366,6 @@ def main():
         screen.blit(myfont.render(str(joueur.Z),1,(255,0,0)),(365,540))
         screen.blit(myfont.render(" du labyrinthe",1,(255,0,0)),(375,540))
 
-        if joueur.Z*tailleCase == caseFinZ :
-                screen.blit(fin , caseFin)
         screen.blit(text, (0,400))
         screen.blit(cmd1, (20,430))
         screen.blit(cmd2, (20,460))
