@@ -10,7 +10,7 @@ from labyrinthe3DPrototype import*
 from pathFinding3D import*
 
 
-tailleCase = 60
+tailleCase = 80
 
 def estDansListe(liste, element):
         res = False
@@ -66,14 +66,24 @@ class perso:
                 
                 self.sprite_idle_1 = pygame.image.load('bob/idle_1.png').convert_alpha()
                 self.sprite_idle_1 = pygame.transform.scale(self.sprite_idle_1 , (tailleCase, tailleCase))
+                
                 self.sprite_idle_2 = pygame.image.load('bob/idle_2.png').convert_alpha()
                 self.sprite_idle_2 = pygame.transform.scale(self.sprite_idle_2 , (tailleCase, tailleCase))
+
+                self.sprite_idle_3 = pygame.image.load('bob/idle_3.png').convert_alpha()
+                self.sprite_idle_3 = pygame.transform.scale(self.sprite_idle_3 , (tailleCase, tailleCase))
+                
+                self.sprite_idle_4 = pygame.image.load('bob/idle_4.png').convert_alpha()
+                self.sprite_idle_4 = pygame.transform.scale(self.sprite_idle_4 , (tailleCase, tailleCase))
+                
                 self.X = 0
                 self.Y = 0
                 self.Z = 0
 
                 self.spriteX = 0
                 self.spriteY = 0
+
+                self.regardeGauche = False
          
 
         def update (self):
@@ -86,9 +96,11 @@ class perso:
                 if direction == 'droite':               
                     #self.direct = self.personnage
                     self.X += 1
+                    self.regardeGauche = False
                 if direction == 'gauche':
                     #self.direct = self.personnage
                     self.X -= 1
+                    self.regardeGauche = True
                 if direction == "haut":
                     #self.direct = self.personnage
                     self.Y -= 1
@@ -353,9 +365,16 @@ def main():
 
         spriteCyclePeriod = 30
         if spriteCycle < spriteCyclePeriod/2:
-                screen.blit(joueur.sprite_idle_1 , (joueur.spriteX*tailleCase, joueur.spriteY*tailleCase))
+                if joueur.regardeGauche:
+                        screen.blit(joueur.sprite_idle_3 , (joueur.spriteX*tailleCase, joueur.spriteY*tailleCase))
+                else:
+                        screen.blit(joueur.sprite_idle_1 , (joueur.spriteX*tailleCase, joueur.spriteY*tailleCase))
+                        
         elif spriteCycle < spriteCyclePeriod:
-                screen.blit(joueur.sprite_idle_2 , (joueur.spriteX*tailleCase, joueur.spriteY*tailleCase))
+                if joueur.regardeGauche:
+                        screen.blit(joueur.sprite_idle_4 , (joueur.spriteX*tailleCase, joueur.spriteY*tailleCase))
+                else:
+                        screen.blit(joueur.sprite_idle_2 , (joueur.spriteX*tailleCase, joueur.spriteY*tailleCase))
         else:
                 spriteCycle = 0
         spriteCycle = spriteCycle + 1
