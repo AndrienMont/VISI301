@@ -257,11 +257,12 @@ def main():
     print(joueur.Y)
     print(joueur.Z)
 
-    font = pygame.font.Font(None, 24)
-    text = font.render("Voici les commandes", 1, (255,255,255))
-    cmd1 = font.render("Utilisez les flêches directionnelles pour se déplacer",1,(255,255,255))
-    cmd2 = font.render("Utilisez H pour monter d'un étage lorsque vous êtes sur une échelle montante", 1, (255,255,255))
-    cmd3 = font.render("Utilisez L pour descendre d'un étage lorsque vous êtes sur une échelle descendante", 1, (255,255,255))
+    font2 = pygame.font.Font(None, 24)
+    font3 = pygame.font.Font("Retro.ttf", 40)
+    text = font2.render("Voici les commandes", 1, (255,255,255))
+    cmd1 = font2.render("Utilisez les flêches directionnelles pour se déplacer",1,(255,255,255))
+    cmd2 = font2.render("Utilisez H pour monter d'un étage lorsque vous êtes sur une échelle montante", 1, (255,255,255))
+    cmd3 = font2.render("Utilisez L pour descendre d'un étage lorsque vous êtes sur une échelle descendante", 1, (255,255,255))
     revelerCouloirs(dedale[joueur.Z], joueur.X, joueur.Y, joueur.Z, posXY)
 
     def recolterEclats(listeEclats):
@@ -276,12 +277,13 @@ def main():
         return quantiteEclatsRecoltes
     
 
-    
+    quitter = False
     while jeu:
         clock.tick(60)
         for event in pygame.event.get():
                 if event.type == QUIT:
                     jeu = False
+                    quitter = True
 
                 if event.type == timer_event: #Si l'event se déroule, alors ....
                         counter += 1
@@ -390,10 +392,40 @@ def main():
         screen.blit(cmd2, (20,460))
         screen.blit(cmd3, (20,490))
         pygame.display.update()
+        
+
 
     score = score - NbDeplacements -  counter
-    print("votre score est de :")
-    print(score)
+    screen.fill(black)
+    screen.blit(font3.render("Vous avez obtenu un score de ", 1,white),(50,100))
+    screen.blit(font3.render(str(score), 1,white),(475,100))
+    screen.blit(font3.render(" points", 1,white),(550,100))
+    screen.blit(font3.render("Vous avez effectués  ", 1,white),(50,200))
+    screen.blit(font3.render(str(NbDeplacements), 1,white),(375,200))
+    screen.blit(font3.render(" déplacements", 1,white),(430,200))
+    screen.blit(font3.render("Vous avez mit ", 1,white),(50,300))
+    screen.blit(font3.render(str(counter), 1,white),(300,300))
+    screen.blit(font3.render(" secondes pour sortir", 1,white),(350,300))
+    
+    
+    pygame.display.update()
+   
+    
+    counter_fin = 10
+    run = True
+    while run and not quitter:
+            clock.tick(60)
+            for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                            run = False
+                    elif event.type == timer_event: #Si l'event se déroule, alors ....
+                            counter_fin -= 1
+                            print(counter_fin)
+                            if counter_fin == 0: #si le compteur arrive à 0, alors ...
+                                    pygame.time.set_timer(timer_event, 0)
+                                    run = False
+
+    
     pygame.quit()
 
 
