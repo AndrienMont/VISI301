@@ -1,0 +1,1 @@
+self.screen.blit(pygame.transform.flip(self.image, False, True), self.rect)
