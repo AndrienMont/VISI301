@@ -208,7 +208,7 @@ def randDepArr3D(posXminF1, posYminF1,nbEtages, tailleCaseF3, mazeF3):
         DepArr = pathFinding3D(mazeF3,DepHyp,ArrHyp)
         nbDepArr = len(DepArr)
 
-    return DepHyp,ArrHyp
+    return DepHyp,ArrHyp,DepArr
 
 
 

@@ -57,7 +57,24 @@ def revelerCouloirs(maze_F4, posX_F4, posY_F4, posZ_F4, baseTiles):
                         baseTiles.extend([tile])
         #print(len(baseTiles))
 
+def listeEstDansListe(listeFille, listeMere):
+        """Vérifie si listeFille se trouve dans listeMere"""
 
+        trouve = False
+        if (len(listeMere) > len(listeFille)):
+                i = 0
+                while (i < len(listeMere)-len(listeFille)+1 and not trouve):
+                        j = 0
+                        itemCorrect = True
+                        while (j < len(listeFille) and itemCorrect):
+                                if not listeFille[j] == listeMere[j+i]:
+                                        itemCorrect = False
+                                j = j + 1
+                        if itemCorrect:
+                                trouve = True
+
+                        i = i + 1
+        return trouve
                
 class perso:
 
@@ -232,19 +249,6 @@ def main(taille):
     #MODIF
     spriteCycle = 0
 
-    #Position des éclats
-    xS1 = randint(0,taille-1)
-    yS1 = randint(0,taille-1)
-    zS1 = randint(0,nbEtages)
-    xS2 = randint(0,taille-1)
-    yS2 = randint(0,taille-1)
-    zS2 = randint(0,nbEtages)
-    xS3 = randint(0,taille-1)
-    yS3 = randint(0,taille-1)
-    zS3 = randint(0,nbEtages)
-
-    Eclat = [(xS1,yS1,zS1),(xS2,yS2,zS2),(xS3,yS3,zS3)]
-
     myfont = pygame.font.SysFont("monospace",15)
     
 
@@ -255,7 +259,6 @@ def main(taille):
     dessLab.dessineDedale(origine_x,origine_y,tailleCase,dedale[joueur.Z],screen,3,3)
     #print(dedale)
 
-    
     caseFinX = DepArr[1][0]*tailleCase
     caseFinY = DepArr[1][1]*tailleCase
     caseFinZ= DepArr[1][2]*tailleCase
@@ -271,6 +274,48 @@ def main(taille):
     print(joueur.X)
     print(joueur.Y)
     print(joueur.Z)
+
+        #Position des éclats
+
+    #Place les éclats de sorte à ce qu'ils ne soient pas sur le chemin de la sortie
+#Eclat 1
+    xS1 = randint(0,taille-1)
+    yS1 = randint(0,taille-1)
+    zS1 = randint(0,nbEtages)
+    eclatChemin = pathFinding3D(dedale, (joueur.X, joueur.Y, joueur.Z),(xS1, yS1, zS1))
+    
+    while listeEstDansListe(eclatChemin, DepArr[2]):
+            xS1 = randint(0,taille-1)
+            yS1 = randint(0,taille-1)
+            zS1 = randint(0,nbEtages)
+            eclatChemin = pathFinding3D(dedale, (joueur.X, joueur.Y, joueur.Z),(xS1, yS1, zS1))
+
+#Eclat 2
+    xS2 = randint(0,taille-1)
+    yS2 = randint(0,taille-1)
+    zS2 = randint(0,nbEtages)
+    eclatChemin = pathFinding3D(dedale, (joueur.X, joueur.Y, joueur.Z),(xS2, yS2, zS2))
+    
+    while listeEstDansListe(eclatChemin, DepArr[2]):
+            xS2 = randint(0,taille-1)
+            yS2 = randint(0,taille-1)
+            zS2 = randint(0,nbEtages)
+            eclatChemin = pathFinding3D(dedale, (joueur.X, joueur.Y, joueur.Z),(xS2, yS2, zS2))
+            
+#Eclat 3
+    xS3 = randint(0,taille-1)
+    yS3 = randint(0,taille-1)
+    zS3 = randint(0,nbEtages)
+    eclatChemin = pathFinding3D(dedale, (joueur.X, joueur.Y, joueur.Z),(xS3, yS3, zS3))
+    
+    while listeEstDansListe(eclatChemin, DepArr[2]):
+            xS3 = randint(0,taille-1)
+            yS3 = randint(0,taille-1)
+            zS3 = randint(0,nbEtages)
+            eclatChemin = pathFinding3D(dedale, (joueur.X, joueur.Y, joueur.Z),(xS3, yS3, zS3))
+
+    Eclat = [(xS1,yS1,zS1),(xS2,yS2,zS2),(xS3,yS3,zS3)]
+
 
     font = pygame.font.Font(None, 24)
     text = font.render("Voici les commandes", 1, (255,255,255))
