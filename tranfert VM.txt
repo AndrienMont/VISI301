@@ -1,1 +1,28 @@
-self.screen.blit(pygame.transform.flip(self.image, False, True), self.rect)
+screen.fill(black)
+    screen.blit(font3.render("Vous avez obtenu un score de ", 1,white),(50,100))
+    screen.blit(font3.render(str(score), 1,white),(475,100))
+    screen.blit(font3.render(" points", 1,white),(550,100))
+    screen.blit(font3.render("Vous avez effectués  ", 1,white),(50,200))
+    screen.blit(font3.render(str(NbDeplacements), 1,white),(375,200))
+    screen.blit(font3.render(" déplacements", 1,white),(430,200))
+    screen.blit(font3.render("Vous avez mit ", 1,white),(50,300))
+    screen.blit(font3.render(str(counter), 1,white),(300,300))
+    screen.blit(font3.render(" secondes pour sortir", 1,white),(350,300))
+
+
+    pygame.display.update()
+
+
+    counter_fin = 10
+    run = True
+    while run and not quitter:
+            clock.tick(60)
+            for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                            run = False
+                    elif event.type == timer_event: #Si l'event se déroule, alors ....
+                            counter_fin -= 1
+                            print(counter_fin)
+                            if counter_fin == 0: #si le compteur arrive à 0, alors ...
+                                    pygame.time.set_timer(timer_event, 0)
+                                    run = False
