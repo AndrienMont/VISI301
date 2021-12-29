@@ -454,6 +454,10 @@ def main(taille):
         screen.blit(myfont.render(str(joueur.Z),1,(255,0,0)),(365,yTexte+140))
         screen.blit(myfont.render(" du labyrinthe",1,(255,0,0)),(375,yTexte+140))
 
+        if shard_amount == 3:
+                screen.blit(font2.render("Tous les cristaux ont étés ramassés, dirigez vous vers la sortie",1,white),(20,yTexte+200))
+                
+
         screen.blit(text, (0,yTexte))
         screen.blit(cmd1, (20,yTexte+30))
         screen.blit(cmd2, (20,yTexte+60))
