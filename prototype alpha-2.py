@@ -141,10 +141,11 @@ class perso:
                         fenetre.blit(self.sprite_idle_3 , (x_F1, y_F1))
                 else:
                         fenetre.blit(self.sprite_idle_4 , (x_F1, y_F1))
-
+best = [0,0,0,0,0]
 
 def main(taille):
     global lastScore
+    global best
     pygame.init()
      
     os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -152,6 +153,10 @@ def main(taille):
     screen_width=700
     screen_height=700
     screen=pygame.display.set_mode((screen_width, screen_height))
+
+
+    if lastScore > best[taille-4]:
+            best[taille-4] = lastScore
     
     clock = pygame.time.Clock()
     counter = 0
@@ -159,7 +164,10 @@ def main(taille):
     pygame.time.set_timer(timer_event, 1000) #initialisation du timer
 
     score = 3000
-    NbDeplacements = 0 
+    NbDeplacements = 0
+    choice = 1
+
+    font3 = pygame.font.Font("Retro.ttf", 40)
      
     def text_format(message, textFont, textSize, textColor):
         newFont=pygame.font.Font(textFont, textSize)
@@ -181,6 +189,8 @@ def main(taille):
     
     jeu = False
     menu=True
+    menuScores = False
+    affiche_fin = True
     selected="jouer"
 
     while menu:
@@ -189,14 +199,26 @@ def main(taille):
                             pygame.quit()
                             quit()
                     if event.type==pygame.KEYDOWN:
-                            if event.key==pygame.K_UP:
+                            if event.key==pygame.K_UP and choice > 0 :
+                                    choice = choice-1
+                            elif event.key==pygame.K_DOWN and choice < 4 :
+                                    choice = choice+1
+                            if choice == 1:
                                     selected="jouer"
-                            elif event.key==pygame.K_DOWN:
+                            if choice == 2:
+                                    selected="scores"
+                            if choice == 3:
                                     selected="quitter"
                             if event.key==pygame.K_RETURN:
                                 if selected=="jouer":
                                         jeu = True
                                         menu = False
+                                        menuScores = False
+                                if selected=="scores":
+                                        jeu = False
+                                        menu = False
+                                        menuScores = True
+                                        
                                 if selected=="quitter":
                                         pygame.quit()
                                         quit()
@@ -207,27 +229,74 @@ def main(taille):
                 text_start=text_format("JOUER", font, 75, white)
             else:
                 text_start = text_format("JOUER", font, 75, black)
+            if selected=="scores":
+                text_score=text_format("MEILLEURS SCORES", font, 75, white)
+            else:
+                text_score= text_format("MEILLEURS SCORES", font, 75, black)
             if selected=="quitter":
                 text_quit=text_format("QUITTER", font, 75, white)
             else:
                 text_quit = text_format("QUITTER", font, 75, black)
 
-            scoreDisp = text_format("Score : "+str(lastScore), font, 75, white)
+            scoreDisp = text_format("Score précédent : "+str(lastScore), font, 75, white)
      
             title_rect=title.get_rect()
             start_rect=text_start.get_rect()
+            score_rect=text_score.get_rect()
             quit_rect=text_quit.get_rect()
             score_rect=scoreDisp.get_rect()
      
             screen.blit(title, (screen_width/2 - (title_rect[2]/2), 80))
-            screen.blit(text_start, (screen_width/2 - (start_rect[2]/2), 300))
-            screen.blit(text_quit, (screen_width/2 - (quit_rect[2]/2), 360))
+            screen.blit(text_start, (screen_width/2 - (start_rect[2]/2), 250))
+            screen.blit(text_score, (screen_width/3 - (start_rect[2]/2), 310))
+            screen.blit(text_quit, (screen_width/2 - (quit_rect[2]/2), 370))
             screen.blit(scoreDisp, (screen_width/2 - (score_rect[2]/2), 2*screen_height/3))
             pygame.display.update()
             pygame.display.set_caption("Prototype Alpha-2 du projet MazeRunner")
      
-        
 
+
+    while menuScores:
+        for event in pygame.event.get():
+                if event.type == QUIT:
+                    menuScores = False
+                    affiche_fin = False
+                if event.type==pygame.KEYDOWN:
+                    if event.key==pygame.K_RETURN:
+                        menuScores = False
+                        menu = True
+                        affiche_fin = False
+                    
+        screen.fill(blue)
+        screen.blit(font3.render("Meilleur score des différents labyrinthes", 1,yellow),(10,20))
+        
+        screen.blit(font3.render("Taille 3 : ", 1,black),(10,100))
+        screen.blit(font3.render(str(best[0]), 1,black),(150,100))
+        screen.blit(font3.render(" points", 1,black),(230,100))
+        
+        screen.blit(font3.render("Taille 4 : ", 1,black),(10,200))
+        screen.blit(font3.render(str(best[1]), 1,black),(150,200))
+        screen.blit(font3.render(" points", 1,black),(230,200))
+        
+        screen.blit(font3.render("Taille 5 : ", 1,black),(10,300))
+        screen.blit(font3.render(str(best[2]), 1,black),(150,300))
+        screen.blit(font3.render(" points", 1,black),(230,300))
+        
+        screen.blit(font3.render("Taille 6 : ", 1,black),(10,400))
+        screen.blit(font3.render(str(best[3]), 1,black),(150,400))
+        screen.blit(font3.render(" points", 1,black),(230,400))
+        
+        screen.blit(font3.render("Taille 7 : ", 1,black),(10,500))
+        screen.blit(font3.render(str(best[4]), 1,black),(150,500))
+        screen.blit(font3.render(" points", 1,black),(230,500))
+
+
+        screen.blit(font3.render("Appuyez sur entrée pour retourner au menu", 1,black),(50,600))        
+
+        pygame.display.update()
+
+                
+    
 
     pygame.key.set_repeat(400, 100)
     
@@ -263,7 +332,6 @@ def main(taille):
     caseFinY = DepArr[1][1]*tailleCase
     caseFinZ= DepArr[1][2]*tailleCase
     caseFin =(caseFinX,caseFinY)
-    couleur = (0,0,0)
 
     print(DepArr)
     print(DepArr[0][0])
@@ -343,6 +411,7 @@ def main(taille):
         for event in pygame.event.get():
                 if event.type == QUIT:
                     jeu = False
+                    affiche_fin = False
 
                 if event.type == timer_event: #Si l'event se déroule, alors ....
                         counter += 1
@@ -398,7 +467,7 @@ def main(taille):
 #Affichage
 
                     
-        screen.fill(couleur)
+        screen.fill(black)
 
         for i in range(len(posXY)):
                  posX = posXY[i][0]
@@ -464,35 +533,38 @@ def main(taille):
         screen.blit(cmd3, (20,yTexte+90))
         pygame.display.update()
 
-    score = score - NbDeplacements -  counter
-    screen.fill(black)
-    screen.blit(font3.render("Vous avez obtenu un score de ", 1,white),(50,100))
-    screen.blit(font3.render(str(score), 1,white),(475,100))
-    screen.blit(font3.render(" points", 1,white),(550,100))
-    screen.blit(font3.render("Vous avez effectués  ", 1,white),(50,200))
-    screen.blit(font3.render(str(NbDeplacements), 1,white),(375,200))
-    screen.blit(font3.render(" déplacements", 1,white),(430,200))
-    screen.blit(font3.render("Vous avez mit ", 1,white),(50,300))
-    screen.blit(font3.render(str(counter), 1,white),(300,300))
-    screen.blit(font3.render(" secondes pour sortir", 1,white),(350,300))
+
+    if affiche_fin :
+
+            score = score - NbDeplacements -  counter
+            screen.fill(black)
+            screen.blit(font3.render("Vous avez obtenu un score de ", 1,white),(50,100))
+            screen.blit(font3.render(str(score), 1,white),(475,100))
+            screen.blit(font3.render(" points", 1,white),(550,100))
+            screen.blit(font3.render("Vous avez effectués  ", 1,white),(50,200))
+            screen.blit(font3.render(str(NbDeplacements), 1,white),(375,200))
+            screen.blit(font3.render(" déplacements", 1,white),(430,200))
+            screen.blit(font3.render("Vous avez mit ", 1,white),(50,300))
+            screen.blit(font3.render(str(counter), 1,white),(300,300))
+            screen.blit(font3.render(" secondes pour sortir", 1,white),(350,300))
 
 
-    pygame.display.update()
-    lastScore = score
+            pygame.display.update()
+            lastScore = score
 
-    counter_fin = 10
-    run = True
-    while run and not quitter:
-            clock.tick(60)
-            for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                            run = False
-                    elif event.type == timer_event: #Si l'event se déroule, alors ....
-                            counter_fin -= 1
-                            print(counter_fin)
-                            if counter_fin == 0: #si le compteur arrive à 0, alors ...
-                                    pygame.time.set_timer(timer_event, 0)
+            counter_fin = 10
+            run = True
+            while run and not quitter:
+                    clock.tick(60)
+                    for event in pygame.event.get():
+                            if event.type == pygame.QUIT:
                                     run = False
+                            elif event.type == timer_event: #Si l'event se déroule, alors ....
+                                    counter_fin -= 1
+                                    print(counter_fin)
+                                    if counter_fin == 0: #si le compteur arrive à 0, alors ...
+                                            pygame.time.set_timer(timer_event, 0)
+                                            run = False
 
     pygame.quit()
 
