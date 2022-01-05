@@ -141,11 +141,11 @@ class perso:
                         fenetre.blit(self.sprite_idle_3 , (x_F1, y_F1))
                 else:
                         fenetre.blit(self.sprite_idle_4 , (x_F1, y_F1))
-best = [0,0,0,0,0]
+#best = [0,0,0,0,0]
 
 def main(taille):
     global lastScore
-    global best
+    #global best
     pygame.init()
      
     os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -154,9 +154,23 @@ def main(taille):
     screen_height=700
     screen=pygame.display.set_mode((screen_width, screen_height))
 
+    fileR = open("highscore.txt")
+    lignes = fileR.read().splitlines()
+    Hscore = int(lignes[-1])
+    fileR.close()
+    fileW = open("highscore.txt","a")
 
-    if lastScore > best[taille-4]:
-            best[taille-4] = lastScore
+    if lastScore > Hscore :
+        fileW.write(str(lastScore)+"\n")
+        Hscore = lastScore
+
+    
+    fileW.close()
+
+
+
+    #if lastScore > best[taille-4]:
+     #       best[taille-4] = lastScore
     
     clock = pygame.time.Clock()
     counter = 0
@@ -189,7 +203,7 @@ def main(taille):
     
     jeu = False
     menu=True
-    menuScores = False
+    #menuScores = False
     affiche_fin = True
     selected="jouer"
 
@@ -201,62 +215,65 @@ def main(taille):
                     if event.type==pygame.KEYDOWN:
                             if event.key==pygame.K_UP and choice > 0 :
                                     choice = choice-1
-                            elif event.key==pygame.K_DOWN and choice < 4 :
+                            elif event.key==pygame.K_DOWN and choice < 3 :
                                     choice = choice+1
                             if choice == 1:
                                     selected="jouer"
+                            #if choice == 2:
+                            #        selected="scores"
                             if choice == 2:
-                                    selected="scores"
-                            if choice == 3:
                                     selected="quitter"
                             if event.key==pygame.K_RETURN:
                                 if selected=="jouer":
                                         jeu = True
                                         menu = False
-                                        menuScores = False
-                                if selected=="scores":
+                                        #menuScores = False
+                                """if selected=="scores":
                                         jeu = False
                                         menu = False
-                                        menuScores = True
+                                        menuScores = True"""
                                         
                                 if selected=="quitter":
                                         pygame.quit()
                                         quit()
      
             screen.fill(blue)
-            title=text_format("MazeRunner", font, 90 , yellow)
+            title=text_format("Project Dedalus", font, 90 , yellow)
             if selected=="jouer":
                 text_start=text_format("JOUER", font, 75, white)
             else:
                 text_start = text_format("JOUER", font, 75, black)
-            if selected=="scores":
+            """if selected=="scores":
                 text_score=text_format("MEILLEURS SCORES", font, 75, white)
             else:
-                text_score= text_format("MEILLEURS SCORES", font, 75, black)
+                text_score= text_format("MEILLEURS SCORES", font, 75, black)"""
             if selected=="quitter":
                 text_quit=text_format("QUITTER", font, 75, white)
             else:
                 text_quit = text_format("QUITTER", font, 75, black)
 
             scoreDisp = text_format("Score précédent : "+str(lastScore), font, 75, white)
+            meilleurScore = text_format("Highscore : "+str(Hscore), font,75,white)
      
             title_rect=title.get_rect()
             start_rect=text_start.get_rect()
-            score_rect=text_score.get_rect()
+            #score_rect=text_score.get_rect()
             quit_rect=text_quit.get_rect()
             score_rect=scoreDisp.get_rect()
+            hscore_rect=meilleurScore.get_rect()
      
             screen.blit(title, (screen_width/2 - (title_rect[2]/2), 80))
             screen.blit(text_start, (screen_width/2 - (start_rect[2]/2), 250))
-            screen.blit(text_score, (screen_width/3 - (start_rect[2]/2), 310))
+            #screen.blit(text_score, (screen_width/3 - (start_rect[2]/2), 310))
             screen.blit(text_quit, (screen_width/2 - (quit_rect[2]/2), 370))
             screen.blit(scoreDisp, (screen_width/2 - (score_rect[2]/2), 2*screen_height/3))
+            screen.blit(meilleurScore,(screen_width/2 - (hscore_rect[2]/2), 550))
             pygame.display.update()
             pygame.display.set_caption("Prototype Alpha-2 du projet MazeRunner")
      
 
 
-    while menuScores:
+    """while menuScores:
         for event in pygame.event.get():
                 if event.type == QUIT:
                     menuScores = False
@@ -293,7 +310,7 @@ def main(taille):
 
         screen.blit(font3.render("Appuyez sur entrée pour retourner au menu", 1,black),(50,600))        
 
-        pygame.display.update()
+        pygame.display.update()"""
 
                 
     
@@ -547,6 +564,13 @@ def main(taille):
             screen.blit(font3.render("Vous avez mit ", 1,white),(50,300))
             screen.blit(font3.render(str(counter), 1,white),(300,300))
             screen.blit(font3.render(" secondes pour sortir", 1,white),(350,300))
+            fileR = open("highscore.txt")
+            lignesR = fileR.read().splitlines()
+            HscoreR = int(lignes[-1])
+            fileR.close()
+            if score > HscoreR :
+                    screen.blit(font3.render("Félicitations ! Nouveau Highscore !",1,white),(100,400))
+            
 
 
             pygame.display.update()
